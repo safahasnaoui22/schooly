@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap");
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	color: rgba(255, 255, 255, 0.80);
+font-size: 16px;
+line-height: 150%; /* 24px */
+letter-spacing: -0.32px;
+	font-family: "Host Grotesk", sans-serif;
+	background-color: #151513;
+	overflow-x: hidden;
+}
+
+.container {
+	width: 100%;
+	height: 100%;
+}
+
+.wrapper {
+	padding-inline: 2rem;
+	max-width: 1440px;
+	width: 100%;
+	margin-inline: auto;
+}
+
+[data-text-anim] {
+  visibility: hidden;
+}
+
+.duplicate-char {
+  position: absolute;
+  inset: 0;
+  transform: translateY(100%);
+}
+
+.preloader-mask, 
+.preloader-progress-bar,
+.preloader-bg {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100svh;
+	width: 100%;
+	pointer-events: none;
+}
+
+.preloader-mask {
+	z-index: 100;
+	background-color: #1C1917;
+  mask: linear-gradient(white, white), url('https://ik.imagekit.io/kg2nszxjp/ironstride-preloader/preloader-mask.svg') center/40% no-repeat;
+  mask-composite: subtract; 
+}
+
+.preloader-progress-bar {
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	background-color: #2D2925;
+}
+
+.preloader-bg {
+  background-color: #fff;
+	transform-origin: left;
+	transform: scaleX(0.2);
+}
+
+.preloader-logo {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	
+	p {
+		margin: auto;
+		text-align: center;
+		mix-blend-mode: difference;
+		font-size: 4rem;
+		color: #fff;
+		font-weight: 500;
+		line-height: 100%;
+	}
+}
+
+
+
+button {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 4px 4px 16px;
+	border-radius: 46px;
+	border: none;
+	outline: none;
+	
+	.btn-icon {
+		width: 34px;
+		height: 34px;
+		background: #25201C;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 50%;
+	}
+}
+
+.header {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	width: 100%;
+	height: 200px;
+	z-index: 10;
+	background: linear-gradient(180deg, #25201c 0%, rgba(37, 32, 28, 0) 100%);
+}
+
+.header .wrapper {
+	display: grid;
+	grid-template-columns: 1fr 2fr 1fr;
+	align-items: start;
+	gap: 24px
+	width: 100%;
+	margin-top: 24px;
+	margin-inline: auto;
+}
+
+.logo {
+	margin-right: auto;
+}
+
+.tagline {
+	font-weight: 700;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	align-items: center;
+	justify-content: center;
+	p {
+	max-width: 430px;
+	}
+	.divider {
+		width: 1px;
+		height: 40px;
+		background: linear-gradient(270deg, rgba(255, 255, 255, 0) 0%, #fff 100%);
+	}
+}
+
+.menu-button {
+	margin-left: auto;
+}
+
+.hero-section {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	position: relative;
+	height: 100svh;
+	border-radius: 3rem;
+	overflow: hidden;
+}
+
+.hero-img {
+	position: absolute;
+	inset: 0;
+	z-index: -10;
+	
+	img {
+		will-change: transform;
+		transform: scale(1.2);
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+.hero-content {
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+	width: 100%;
+}
+
+.content-main {
+	.sub-title {
+		max-width: 240px;
+		color: #FFF;
+		font-size: 22px;
+		font-weight: 700;
+		line-height: 130%;
+		letter-spacing: -0.66px;
+	}
+	
+	h1 {
+		margin-left: -12px;
+/* 		text-shadow: 0 4px 53.1px rgba(38, 35, 35, 0.26); */
+		font-size: clamp(5rem, 12.752vw + 2.21rem, 13.688rem);
+		font-weight: 600;
+		line-height: 90%; /* 197.1px */
+		letter-spacing: -8.76px;
+		background: linear-gradient(180deg, #FFF 17.73%, #F7CFB4 92.44%);
+background-clip: text;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+	}
+}
+
+.header-char {
+	background: linear-gradient(180deg, #FFF 17.73%, #F7CFB4 92.44%);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.content-cta {
+	position: relative;
+	max-width: 266px;
+	border-radius: 12px;
+	background: linear-gradient(180deg, #FFE5CF 0%, rgba(255, 191, 136, 0.90) 100%);
+	box-shadow: 0 4px 54px 0 #2B1D10;
+	overflow: hidden;
+	
+	.cta-marquee {
+		background: #231A13;
+		display: flex;
+		gap: 8px;
+		color: #FFCBA8;
+		font-size: 20px;
+		font-weight: 600;
+		letter-spacing: -0.6px;
+		margin-top: 10px;
+	}
+	
+	.marquee-group {
+		align-items: center;
+		white-space: nowrap;
+		width: max-content;
+		display: flex;
+		gap: 8px;
+		padding-block: 10px;
+		animation: scroll 30s linear infinite;
+	}
+	
+	.img-wrapper {
+		margin: 10px;
+		img { 
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			border-radius: 10px;
+		}
+	}
+		
+	.register-button {
+		position: absolute;
+		bottom: 20px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: max-content;
+		background: #FF983F;
+	}
+}
+
+@keyframes scroll {
+	to {
+		transform: translateX(calc(-100% - 8px));
+	}
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+	<header class="header">
+		<div class="wrapper">
+
+			<div class="logo" data-fade-in="down">
+				<img src="https://ik.imagekit.io/kg2nszxjp/ironstride-preloader/logo.svg" alt="">
+			</div>
+
+			<div class="tagline">
+				<p data-text-anim="bodyAnimation">TRAIN HARDER. RACE STRONGER. BELONG TO SOMETHING GREATER. WELCOME TO THE COMMUNITY!</p>
+				<div class="divider"></div>
+			</div>
+
+			<button class="menu-button" data-fade-in="down">
+				<span>Menu</span>
+				<span class="btn-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="12" height="11" fill="none">
+						<path fill="#fff" d="M3 1.543a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM12 1.543a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM3 8.543a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM12 8.543a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
+					</svg>
+				</span>
+			</button>
+		</div>
+
+	</header>
+
+	<div class="preloader-progress-bar">
+		<div class="preloader-bg"></div>
+		<div class="preloader-logo">
+			<p class="logo-text" data-text-anim="logoAnimation">IronStride®</p>
+		</div>
+	</div>
+	<div class="preloader-mask"></div>
+
+	<section class="hero-section">
+		<div class="wrapper">
+			<div class="hero-img">
+				<img src="https://ik.imagekit.io/kg2nszxjp/ironstride-preloader/hero-bg.webp" alt="">
+			</div>
+			<div class="hero-content">
+				<div class="content-main">
+					<p class="sub-title" data-text-anim="bodyAnimation">Push Beyond Limits—Run Like You Mean It</h2>
+					<h1 data-text-anim="headerAnimation">IronStride®</h1>
+				</div>
+
+				<div class="content-cta" data-fade-in="left">
+
+					<div class="cta-marquee">
+						<div class="marquee-group">
+							<img src="https://ik.imagekit.io/kg2nszxjp/ironstride-preloader/hammer.svg" alt="">
+							<span>JOIN THE CLUB!</span>
+							<img src="https://ik.imagekit.io/kg2nszxjp/ironstride-preloader/hammer.svg" alt="">
+							<span>JOIN THE CLUB!</span>
+							<img src="https://ik.imagekit.io/kg2nszxjp/ironstride-preloader/hammer.svg" alt="">
+							<span>JOIN THE CLUB!</span>
+							<img src="https://ik.imagekit.io/kg2nszxjp/ironstride-preloader/hammer.svg" alt="">
+							<span>JOIN THE CLUB!</span>
+						</div>
+
+						<div class="marquee-group" aria-hidden="true">
+							<img src="https://ik.imagekit.io/kg2nszxjp/ironstride-preloader/hammer.svg" alt="">
+							<span>JOIN THE CLUB!</span>
+							<img src="https://ik.imagekit.io/kg2nszxjp/ironstride-preloader/hammer.svg" alt="">
+							<span>JOIN THE CLUB!</span>
+							<img src="https://ik.imagekit.io/kg2nszxjp/ironstride-preloader/hammer.svg" alt="">
+							<span>JOIN THE CLUB!</span>
+							<img src="https://ik.imagekit.io/kg2nszxjp/ironstride-preloader/hammer.svg" alt="">
+							<span>JOIN THE CLUB!</span>
+						</div>
+					</div>
+
+					<div class="img-wrapper">
+						<img src="https://ik.imagekit.io/kg2nszxjp/ironstride-preloader/cta-img.webp" alt="Join the club">
+					</div>
+
+					<button class="register-button"><span>Register Now</span> <span class="btn-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none">
+								<path fill="#FF983F" d="M1.753.5H11.5v9.747H9.728V3.525L1.753 11.5.5 10.247l7.975-7.975H1.753V.5Z" />
+							</svg>
+						</span>
+					</button>
+				</div>
+			</div>
+		</div>
+
+	</section>
+</div>
+<script>
+    gsap.registerPlugin(CustomEase, SplitText);
+CustomEase.create(
+	"stutterEase",
+	"M0,0 C0,0 0.052,0.1 0.152,0.1 0.242,0.1 0.299,0.349 0.399,0.349 0.586,0.349 0.569,0.596 0.67,0.624 0.842,0.671 0.95,0.95 1,1"
+);
+const textAnimations = {
+	logoAnimation: (el) => {
+		const split = SplitText.create(el, {
+			type: "chars",
+			smartWrap: true,
+			mask: "chars"
+		});
+
+		split.chars.forEach((charEl) => {
+			const text = charEl.innerText;
+			charEl.innerHTML = "";
+			const ogDiv = document.createElement("div");
+			ogDiv.className = "og-char";
+			ogDiv.innerText = text;
+			const dupDiv = document.createElement("div");
+			dupDiv.className = "duplicate-char";
+			dupDiv.innerText = text;
+			charEl.appendChild(ogDiv);
+			charEl.appendChild(dupDiv);
+		});
+
+		gsap.from(split.chars, {
+			yPercent: -100,
+			ease: "power2.inOut",
+			stagger: {
+				each: 0.02,
+				from: "random"
+			},
+			duration: 0.5,
+			repeat: 1,
+			repeatDelay: 0.75
+		});
+	},
+	headerAnimation: (el) => {
+		const split = SplitText.create(el, {
+			type: "chars",
+			smartWrap: true,
+			mask: "chars",
+			charsClass: "header-char"
+		});
+
+		gsap.from(split.chars, {
+			xPercent: -100,
+			ease: "power2.inOut",
+			stagger: {
+				each: 0.02,
+				from: "random"
+			},
+			duration: 0.5
+		});
+	},
+	bodyAnimation: (el) => {
+		const split = SplitText.create(el, {
+			type: "lines",
+			mask: "lines",
+			autoSplit: true,
+			onSplit: (self) => {
+				return gsap.from(self.lines, {
+					opacity: 0,
+					yPercent: -100,
+					duration: 0.9,
+					stagger: 0.1,
+					// ease: "back.inOut(2)",
+					ease: "power3.inOut",
+					scrollTrigger: {
+						trigger: el,
+						start: "top 90%"
+					}
+				});
+			}
+		});
+	}
+};
+
+function animateText(el) {
+	document.fonts.ready.then(() => {
+		gsap.set(el, { visibility: "visible" });
+		const animType = document.querySelector(el).dataset.textAnim;
+		const animFunc = textAnimations[animType];
+		console.log(animFunc);
+		if (animFunc) animFunc(el);
+	});
+}
+
+function preloaderAnimation() {
+	let tl = gsap.timeline();
+	tl
+		.call(animateText, [".logo-text"])
+		.to(".preloader-bg", {
+			scaleX: 1,
+			ease: "stutterEase",
+			duration: 2.8
+		})
+		.to(".preloader-mask", {
+			scale: 3,
+			duration: 0.9,
+			ease: "expoScale(0.5,7,power1.in)"
+		})
+		.to(
+			".preloader-bg, .preloader-logo, .preloader-progress-bar",
+			{
+				opacity: 0,
+				duration: 0.85,
+				ease: "power2.inOut"
+			},
+			"<"
+		)
+		.to(
+			".hero-img img",
+			{
+				scale: 1,
+				duration: 2.85,
+				ease: "expoScale(0.5,7,power1.out)"
+			},
+			"<"
+		);
+
+	return tl;
+}
+
+function heroAnimation() {
+	let tl = gsap.timeline();
+	tl
+		.call(animateText, [".tagline p"])
+		.fromTo(
+			".divider",
+			{
+				scaleY: 0,
+				transformOrigin: "top"
+			},
+			{
+				scaleY: 1,
+				duration: 0.5,
+				ease: "back.inOut"
+			},
+			"+=.5"
+		)
+		.fromTo(
+			"[data-fade-in]",
+			{
+				filter: "blur(30px)",
+				opacity: 0,
+
+				yPercent: (index, element) => {
+					return element.getAttribute("data-fade-in") === "down" ? -100 : 0;
+				},
+
+				xPercent: (index, element) => {
+					return element.getAttribute("data-fade-in") === "left" ? 100 : 0;
+				}
+			},
+
+			{
+				yPercent: 0,
+				xPercent: 0,
+
+				filter: "blur(0px)",
+				opacity: 1,
+				duration: 1.25,
+				ease: "power4.inOut",
+				stagger: 0.08
+			},
+			"<-.25"
+		)
+		.call(animateText, ["h1"], "<.55")
+		.call(animateText, [".sub-title"], "-=.75");
+
+	return tl;
+}
+
+window.addEventListener("load", () => {
+	const introTimeline = gsap.timeline();
+	const preloaderTl = preloaderAnimation();
+	const heroTl = heroAnimation();
+	introTimeline.add(preloaderTl).add(heroTl, "-=2.4");
+});
+
+</script>
+</body>
+</html>

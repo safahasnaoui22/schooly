@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education path · timeline concept</title>
+    <style>
+        /* === fresh academic palette === */
+        :root {
+            --color-accent-light: #6a4ff0;   /* soft purple */
+            --color-accent-dark: #2f80ed;     /* vibrant blue */
+            --color-secondary: #b7c9e2;
+
+            --text-color-default: #1e293b;
+            --text-color-light: #f8fafc;
+
+            --font-size-default: 15px;
+            --font-size-lg: 25px;
+
+            --font-weight-regular: 400;
+            --font-weight-semibold: 600;
+            --font-weight-default: var(--font-weight-regular);
+
+            --border-color-default: var(--color-secondary);
+            --border-color-accent: var(--color-accent-dark);
+
+            --bg-color-default: #ffffff;
+            --bg-color-dark: #1e293b;
+            --bg-color-accent--light: var(--color-accent-light);
+            --bg-color-accent--dark: var(--color-accent-dark);
+
+            --transition-duration: .2s;
+            --transition-timing-function: linear;
+            --transition-delay: 0s;
+
+            --negative-multiplier: -1;
+
+            --gradient-default: linear-gradient(122deg, var(--color-accent-light) 0%, var(--color-accent-dark) 100%);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            font-size: var(--font-size-default);
+            color: var(--text-color-default);
+            background: #f2f5fa;
+            margin: 0;
+            padding: 20px 0 40px;
+        }
+
+        /* header small adjustment */
+        .header {
+            max-width: 600px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .header__btns {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        body a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .header__btn {
+            transition: all var(--transition-duration) var(--transition-timing-function) var(--transition-delay);
+            padding: 10px 20px;
+            background-color: var(--bg-color-default);
+            border: 1px solid var(--border-color-default);
+            border-radius: 40px;
+            cursor: pointer;
+            outline: none;
+            font-weight: 500;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+        }
+
+        .header__btn:hover {
+            color: var(--text-color-light);
+            background-color: var(--bg-color-dark);
+            border-color: var(--bg-color-dark);
+        }
+
+        .header__title {
+            margin-bottom: 8px;
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-accent-dark);
+        }
+
+        .content {
+            margin: 30px auto;
+        }
+
+        .content__title {
+            margin-bottom: 60px;
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-default);
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        /* ----- timeline core (preserved structure, only colors/svg/text changed) ----- */
+        .timeline {
+            --wrapper-width: 1000px;
+            width: 95%;
+            max-width: var(--wrapper-width);
+            margin: auto;
+        }
+
+        .timeline__stepper {
+            --step-border-width: 3px;
+            --offset-to-slider-content: 30px;
+
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: var(--offset-to-slider-content);
+        }
+
+        @media(min-width: 530px) {
+            .timeline__stepper {
+                display: flex;
+                justify-content: space-around;
+                gap: 0;
+            }
+        }
+
+        @media(min-width: 700px) {
+            .timeline__stepper {
+                --offset-to-slider-content: 50px;
+            }
+        }
+
+        .timeline__step {
+            position: relative;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        @media(min-width: 530px) {
+            .timeline__step {
+                width: 100%;
+            }
+        }
+
+        .timeline__icon {
+            --timeline-icon-dimensions: 45px;
+
+            position: relative;
+            display: block;
+            width: var(--timeline-icon-dimensions);
+            max-height: var(--timeline-icon-dimensions);
+            height: auto;
+            margin: 0 auto;
+            transition: opacity var(--transition-duration) var(--transition-timing-function) var(--transition-delay);
+            fill: #2c3e50;   /* default icon color */
+        }
+
+        @media(min-width: 700px) {
+            .timeline__icon {
+                --timeline-icon-dimensions: 64px;
+                margin-bottom: 20px;
+            }
+        }
+
+        .timeline__icon--active {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            fill: url(#icon-gradient-education);   /* uses the new gradient */
+            opacity: 0;
+        }
+
+        .timeline__step-title {
+            --timeline-dot-dimensions: 11px;
+            --extra-offset-fox-pixelperfect: -1px;
+
+            position: relative;
+            display: none;
+            padding-top: 30px;
+            margin-bottom: 0;
+            text-align: center;
+            line-height: 1.6;
+            border-top: var(--step-border-width) solid var(--border-color-default);
+            font-weight: 500;
+        }
+
+        @media(min-width: 700px) {
+            .timeline__step-title {
+                display: block;
+            }
+        }
+
+        .timeline__step-title:before,
+        .timeline__step-title:after {
+            position: absolute;
+            top: var(--dot-top-position);
+            left: 50%;
+            display: block;
+            width: var(--timeline-dot-dimensions);
+            height: var(--timeline-dot-dimensions);
+            content: '';
+            border-radius: 50%;
+        }
+
+        .timeline__step-title:before {
+            --dot-top-position: calc(
+                    var(--timeline-dot-dimensions)/2 * var(--negative-multiplier) + var(--extra-offset-fox-pixelperfect)
+            );
+            transform: translate(-50%);
+            border: 2px solid var(--border-color-default);
+            background-color: #fff;
+            z-index: 5;
+        }
+
+        .timeline__step-title:after {
+            --timeline-dot-dimensions: 25px;
+            --dot-top-position: calc(
+                    var(--timeline-dot-dimensions)/2 * var(--negative-multiplier) + var(--extra-offset-fox-pixelperfect)
+            );
+            transform: translate(-50%) scale(0);
+            border-radius: 50%;
+            background-color: #fff;
+        }
+
+        /* animated marker (generated by js) */
+        .timeline__step-active-marker {
+            --slide-pos-y: none;
+            --slide-pos-x: none;
+            --slide-width: auto;
+            --transition-timing-function: cubic-bezier(0, 0, 0, 1.2);
+
+            position: absolute;
+            top: var(--slide-pos-y);
+            left: 0;
+            display: none;
+            width: var(--slide-width);
+            height: var(--step-border-width);
+            transform: translateX(var(--slide-pos-x));
+            transition: transform var(--transition-duration) var(--transition-timing-function) var(--transition-delay);
+            background-image: var(--gradient-default);
+        }
+
+        @media(min-width: 700px) {
+            .timeline__step-active-marker {
+                display: block;
+            }
+        }
+
+        .timeline__step.is-active {
+            cursor: default;
+        }
+
+        .timeline__step.is-active .timeline__step-title {
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .timeline__step.is-active .timeline__step-title:before {
+            transition: background-color var(--transition-duration) var(--transition-timing-function) var(--transition-delay);
+            background-color: var(--color-accent-dark);
+            border-color: var(--border-color-accent);
+        }
+
+        .timeline__step.is-active .timeline__step-title:after {
+            transform: translate(-50%) scale(1);
+            transition: transform var(--transition-duration) var(--transition-timing-function) var(--transition-delay);
+            background-image: var(--gradient-default);
+            opacity: .35;
+        }
+
+        .timeline__step.is-active .timeline__icon--default,
+        .timeline__step:not(.is-active):hover .timeline__icon--default {
+            opacity: 0;
+        }
+
+        .timeline__step.is-active .timeline__icon--active,
+        .timeline__step:not(.is-active):hover .timeline__icon--active {
+            opacity: 1;
+        }
+
+        /* slides panel */
+        .timeline__slides {
+            --slides-container-height: 0px;
+            --content-offset-x: 20px;
+            --content-offset-y: 30px;
+            --decoration-blur-spread: 20px;
+            --decoration-opacity: .7;
+            --decoration-pos-x: 0;
+            --decoration-pos-y: 20px;
+            --decoration-scale: 1;
+
+            position: relative;
+            width: 700px;
+            max-width: 100%;
+            margin: auto;
+            height: var(--slides-container-height);
+            border-radius: 24px;
+            background-color: var(--bg-color-default);
+            box-shadow: 0 20px 30px -10px rgba(47, 128, 237, 0.15);
+        }
+
+        @media(min-width: 700px) {
+            .timeline__slides {
+                --content-offset-x: 40px;
+                --content-offset-y: 40px;
+            }
+        }
+
+        .timeline__slides:before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            content: "";
+            opacity: var(--decoration-opacity);
+            background-image: var(--gradient-default);
+            filter: blur(var(--decoration-blur-spread));
+            transform: translate3d(var(--decoration-pos-x), var( --decoration-pos-y), 0) scale(var(--decoration-scale));
+            z-index: -1;
+            border-radius: 24px;
+        }
+
+        .timeline__slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: var(--content-offset-y) var(--content-offset-x);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-duration) ease;
+        }
+
+        .timeline__slide.is-active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .timeline__slide-title {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            background: var(--gradient-default);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .timeline__slide-content {
+            line-height: 1.8;
+            color: #334155;
+        }
+
+        .timeline__slide-content p:first-child {
+            margin-top: 0;
+        }
+
+        .timeline__slide-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* tiny extra: svg gradient unique for education */
+    </style>
+    <style>
+        .timeline__slide.is-active {
+    animation: slideContentFade 0.4s ease-out;
+}
+
+@keyframes slideContentFade {
+    0% {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.timeline__step.is-active .timeline__icon--active {
+    animation: iconPulse 0.3s ease-in-out;
+}
+
+@keyframes iconPulse {
+    0% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.15); }
+    100% { transform: translateX(-50%) scale(1); }
+}
+.timeline__slides:before {
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.timeline__slides:hover:before {
+    filter: blur(15px);
+    transform: translate3d(0, 15px, 0) scale(1.02);
+}
+.timeline__step:hover .timeline__step-title {
+    animation: titleGlow 1s infinite alternate;
+}
+
+@keyframes titleGlow {
+    from { text-shadow: 0 0 0px rgba(106, 79, 240, 0); }
+    to { text-shadow: 0 0 8px rgba(47, 128, 237, 0.3); }
+}
+/* Smooth marker movement enhancement */
+.timeline__step-active-marker {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Icon hover effect */
+.timeline__step:hover .timeline__icon--default {
+    transform: scale(1.05);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Slide content fade for paragraphs */
+.timeline__slide-content p {
+    animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.timeline__slide-content p:nth-child(1) { animation-delay: 0.1s; }
+.timeline__slide-content p:nth-child(2) { animation-delay: 0.2s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+    </style>
+</head>
+<body>
+
+<!-- SVG GRADIENTS + EDUCATION ICONS (same structure, new icons / gradient) -->
+<svg aria-hidden="true" focusable="false" style="width:0;height:0;position:absolute;">
+    <linearGradient id="icon-gradient-education" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#6a4ff0" />
+        <stop offset="100%" stop-color="#2f80ed" />
+    </linearGradient>
+
+    <defs>
+        <!-- icon 1: graduation cap -->
+        <symbol id="icon-graduation" viewBox="0 0 64 64">
+            <path d="M52 30.5V42c0 .8-.4 1.5-1.1 1.8L33 52.8c-1.2.6-2.8.6-4 0l-18-9c-.7-.3-1-1-1-1.8v-11l-2.5-1.2c-1.3-.6-1.3-2.4 0-3L31 16.2c1.2-.6 2.8-.6 4 0l21 10.5c1.3.6 1.3 2.4 0 3L52 30.5zm-20 9L16 32v8.5l14 7 14-7V32l-12 5.5c-.6.3-1.4.3-2 0z"/>
+        </symbol>
+        <!-- icon 2: book / library -->
+        <symbol id="icon-book" viewBox="0 0 64 64">
+            <path d="M20 12c-4 0-8 2-8 6v28c0 4 4 6 8 6h30V16H20c-2 0-4-1-4-2s2-2 4-2h28V8H20c-4 0-8 2-8 6v32c0 4 4 6 8 6h32V12H20z"/>
+            <circle cx="26" cy="24" r="2"/>
+            <circle cx="26" cy="34" r="2"/>
+            <circle cx="26" cy="44" r="2"/>
+            <path d="M38 24h8v2h-8zM38 34h8v2h-8zM38 44h8v2h-8z"/>
+        </symbol>
+        <!-- icon 3: pencil / lesson -->
+        <symbol id="icon-pencil" viewBox="0 0 64 64">
+            <path d="M47.2 10.2l-4.8 4.8 8.6 8.6 4.8-4.8c1.6-1.6 1.6-4.2 0-5.8l-2.8-2.8c-1.6-1.6-4.2-1.6-5.8 0zM39 18.4L16 41.4V48h6.6l23-23-6.6-6.6z"/>
+        </symbol>
+        <!-- icon 4: microscope / science -->
+        <symbol id="icon-microscope" viewBox="0 0 64 64">
+            <path d="M40 12c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm-8 8l-8 20h16l-8-20zm8 24v8h-8v-8h8z"/>
+            <path d="M20 52h24v4H20zM48 36c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4z"/>
+        </symbol>
+        <!-- icon 5: laptop / online course -->
+        <symbol id="icon-laptop" viewBox="0 0 64 64">
+            <path d="M52 16H12c-2.2 0-4 1.8-4 4v24h48V20c0-2.2-1.8-4-4-4zM8 48v4c0 2.2 1.8 4 4 4h40c2.2 0 4-1.8 4-4v-4H8z"/>
+        </symbol>
+        <!-- icon 6: diploma / certificate -->
+        <symbol id="icon-diploma" viewBox="0 0 64 64">
+            <path d="M48 8H16c-4 0-8 4-8 8v24c0 4 4 8 8 8h12l4 6 4-6h12c4 0 8-4 8-8V16c0-4-4-8-8-8zM20 24h24v4H20v-4zm0 8h24v4H20v-4z"/>
+        </symbol>
+    </defs>
+</svg>
+
+<header class="header">
+    <h1 class="header__title">🎓 Education path · timeline</h1>
+  
+</header>
+
+<div class="content">
+    <div class="container">
+  
+
+        <div class="timeline">
+            <div class="timeline__stepper">
+                <!-- step 1: graduation (active by default) -->
+                <div class="timeline__step is-active">
+                    <svg class="timeline__icon timeline__icon--default">
+                        <use href="#icon-graduation"/>
+                    </svg>
+                    <svg class="timeline__icon timeline__icon--active">
+                        <use href="#icon-graduation"/>
+                    </svg>
+                    <p class="timeline__step-title">Enroll &<br>orient</p>
+                </div>
+                <!-- step 2: book -->
+                <div class="timeline__step">
+                    <svg class="timeline__icon timeline__icon--default">
+                        <use href="#icon-book"/>
+                    </svg>
+                    <svg class="timeline__icon timeline__icon--active">
+                        <use href="#icon-book"/>
+                    </svg>
+                    <p class="timeline__step-title">Core<br>courses</p>
+                </div>
+                <!-- step 3: pencil -->
+                <div class="timeline__step">
+                    <svg class="timeline__icon timeline__icon--default">
+                        <use href="#icon-pencil"/>
+                    </svg>
+                    <svg class="timeline__icon timeline__icon--active">
+                        <use href="#icon-pencil"/>
+                    </svg>
+                    <p class="timeline__step-title">Assignments<br>& labs</p>
+                </div>
+                <!-- step 4: microscope -->
+                <div class="timeline__step">
+                    <svg class="timeline__icon timeline__icon--default">
+                        <use href="#icon-microscope"/>
+                    </svg>
+                    <svg class="timeline__icon timeline__icon--active">
+                        <use href="#icon-microscope"/>
+                    </svg>
+                    <p class="timeline__step-title">Research<br>project</p>
+                </div>
+                <!-- step 5: laptop -->
+                <div class="timeline__step">
+                    <svg class="timeline__icon timeline__icon--default">
+                        <use href="#icon-laptop"/>
+                    </svg>
+                    <svg class="timeline__icon timeline__icon--active">
+                        <use href="#icon-laptop"/>
+                    </svg>
+                    <p class="timeline__step-title">Online<br>electives</p>
+                </div>
+                <!-- step 6: diploma -->
+                <div class="timeline__step">
+                    <svg class="timeline__icon timeline__icon--default">
+                        <use href="#icon-diploma"/>
+                    </svg>
+                    <svg class="timeline__icon timeline__icon--active">
+                        <use href="#icon-diploma"/>
+                    </svg>
+                    <p class="timeline__step-title">Graduation<br>& beyond</p>
+                </div>
+            </div> <!-- stepper -->
+
+            <div class="timeline__slides">
+                <!-- slide 1: enroll -->
+                <div class="timeline__slide is-active">
+                    <h3 class="timeline__slide-title">🎯 Enroll & orientation</h3>
+                    <div class="timeline__slide-content">
+                        <p>Welcome to the first step! Choose your major, meet academic advisors, and build your study plan. Orientation helps you navigate campus life and digital learning tools.</p>
+                    </div>
+                </div>
+                <!-- slide 2: core courses -->
+                <div class="timeline__slide">
+                    <h3 class="timeline__slide-title">📚 Core courses</h3>
+                    <div class="timeline__slide-content">
+                        <p>Foundational classes in mathematics, sciences, and humanities. These courses build critical thinking and prepare you for upper‑division subjects.</p>
+                    </div>
+                </div>
+                <!-- slide 3: assignments -->
+                <div class="timeline__slide">
+                    <h3 class="timeline__slide-title">✏️ Assignments & labs</h3>
+                    <div class="timeline__slide-content">
+                        <p>Hands‑on projects, problem sets, and lab sessions. Apply theoretical knowledge, work in teams, and get feedback from instructors.</p>
+                    </div>
+                </div>
+                <!-- slide 4: research -->
+                <div class="timeline__slide">
+                    <h3 class="timeline__slide-title">🔬 Research project</h3>
+                    <div class="timeline__slide-content">
+                        <p>Conduct independent or guided research. Formulate hypotheses, analyze data, and present findings — a cornerstone of academic growth.</p>
+                    </div>
+                </div>
+                <!-- slide 5: online electives -->
+                <div class="timeline__slide">
+                    <h3 class="timeline__slide-title">💻 Online electives</h3>
+                    <div class="timeline__slide-content">
+                        <p>Explore interdisciplinary topics: from data science to creative writing. Flexible online modules let you customize your degree.</p>
+                    </div>
+                </div>
+                <!-- slide 6: graduation -->
+                <div class="timeline__slide">
+                    <h3 class="timeline__slide-title">🎓 Graduation & beyond</h3>
+                    <div class="timeline__slide-content">
+                        <p>Complete your capstone, celebrate commencement, and step into your career. Alumni networks and career services support your future.</p>
+                    </div>
+                </div>
+            </div> <!-- slides -->
+        </div> <!-- timeline -->
+    </div> <!-- container -->
+</div> <!-- content -->
+
+<script>
+    (function() {
+        // DOM class names (kept identical to preserve logic)
+        const DOM = {
+            timeline: "timeline",
+            timelineStepper: "timeline__stepper",
+            timelineStep: "timeline__step",
+            timelineStepTitle: "timeline__step-title",
+            timelineStepActive: "is-active",
+            timelineStepActiveMarker: "timeline__step-active-marker",
+            timelineSlidesContainer: "timeline__slides",
+            timelineSlide: "timeline__slide",
+            timelineSlideActive: "is-active",
+        };
+
+        const STEP_ACTIVE_MARKER_CUSTOM_PROPS = {
+            width: "--slide-width",
+            posX: "--slide-pos-x",
+            posY: "--slide-pos-y",
+        };
+
+        const SLIDES_CONTAINER_CUSTOM_PROPS = {
+            height: "--slides-container-height",
+        };
+
+        const timeline = document.querySelector(`.${DOM.timeline}`);
+        const timelineStepper = timeline?.querySelector(`.${DOM.timelineStepper}`);
+        const timelineStepTitle = timeline?.querySelector(`.${DOM.timelineStepTitle}`);
+        const timelineSlidesContainer = timeline?.querySelector(`.${DOM.timelineSlidesContainer}`);
+        const timelineSlides = timeline && Array.from(timeline.querySelectorAll(`.${DOM.timelineSlide}`));
+
+        // ---- helpers (same as original, but with safe guards) ----
+        function getCurrentStep() {
+            const timelineSteps = Array.from(document.querySelectorAll(`.${DOM.timelineStep}`));
+            const currentStep = timelineSteps.find(el => el.classList.contains(DOM.timelineStepActive));
+            const currentStepIndex = currentStep ? timelineSteps.findIndex(el => el.classList.contains(DOM.timelineStepActive)) : undefined;
+            return { currentStep, currentStepIndex };
+        }
+
+        function getCurrentSlide() {
+            const { currentStepIndex } = getCurrentStep();
+            if (typeof currentStepIndex !== "number" || !timelineSlides) return null;
+            return timelineSlides[currentStepIndex];
+        }
+
+        function deactivateSteps() {
+            document.querySelectorAll(`.${DOM.timelineStep}`).forEach(el => el.classList.remove(DOM.timelineStepActive));
+        }
+
+        function activateCurrentStep(step) {
+            step?.classList.add(DOM.timelineStepActive);
+        }
+
+        function deactivateSlides() {
+            timelineSlides?.forEach(slide => slide.classList.remove(DOM.timelineSlideActive));
+        }
+
+        function activateCurrentSlide() {
+            const currentSlide = getCurrentSlide();
+            if (!currentSlide) return;
+            const height = currentSlide.clientHeight;
+            if (timelineSlidesContainer) {
+                timelineSlidesContainer.style.setProperty(SLIDES_CONTAINER_CUSTOM_PROPS.height, height + 'px');
+            }
+            currentSlide.classList.add(DOM.timelineSlideActive);
+        }
+
+        function getStepActiveMarkerPosY() {
+            const titlePos = timelineStepTitle?.getBoundingClientRect().top;
+            const stepperPos = timelineStepper?.getBoundingClientRect().top;
+            if (titlePos === undefined || stepperPos === undefined) return null;
+            return titlePos - stepperPos;
+        }
+
+        function getStepActiveMarkerPosX(currentStep) {
+            const stepperLeft = timelineStepper?.getBoundingClientRect().left;
+            const stepLeft = currentStep.getBoundingClientRect().left;
+            if (stepperLeft === undefined) return null;
+            return stepLeft - stepperLeft;
+        }
+
+        function getElementWidth(elem) {
+            return elem.clientWidth;
+        }
+
+        function getStepActiveMarkerProps() {
+            const { currentStep } = getCurrentStep();
+            if (!currentStep) return null;
+
+            const width = getElementWidth(currentStep);
+            const posX = getStepActiveMarkerPosX(currentStep);
+            const posY = getStepActiveMarkerPosY();
+            if (posX === null || posY === null) return null;
+            return { posX, posY, width };
+        }
+
+        function setStepActiveMarkerProps({ stepActiveMarker, posX, posY, width }) {
+            stepActiveMarker.style.setProperty(STEP_ACTIVE_MARKER_CUSTOM_PROPS.width, width + 'px');
+            stepActiveMarker.style.setProperty(STEP_ACTIVE_MARKER_CUSTOM_PROPS.posX, posX + 'px');
+            stepActiveMarker.style.setProperty(STEP_ACTIVE_MARKER_CUSTOM_PROPS.posY, posY + 'px');
+        }
+
+        function recalcStepActiveMarkerProps() {
+            const stepActiveMarker = timeline?.querySelector(`.${DOM.timelineStepActiveMarker}`);
+            if (!stepActiveMarker) return;
+            const props = getStepActiveMarkerProps();
+            if (props) setStepActiveMarkerProps({ stepActiveMarker, ...props });
+        }
+
+        function createStepActiveMarker() {
+            if (!timelineStepper) return;
+            const marker = document.createElement('div');
+            marker.classList.add(DOM.timelineStepActiveMarker);
+            timelineStepper.appendChild(marker);
+
+            const props = getStepActiveMarkerProps();
+            if (props) setStepActiveMarkerProps({ stepActiveMarker: marker, ...props });
+        }
+
+        // --- event listeners ---
+        window.addEventListener('load', () => {
+            createStepActiveMarker();
+            activateCurrentSlide();
+        });
+
+        window.addEventListener('resize', () => {
+            recalcStepActiveMarkerProps();
+            // also update slides container height based on active slide
+            const activeSlide = timeline?.querySelector(`.${DOM.timelineSlideActive}`);
+            if (activeSlide && timelineSlidesContainer) {
+                timelineSlidesContainer.style.setProperty(SLIDES_CONTAINER_CUSTOM_PROPS.height, activeSlide.clientHeight + 'px');
+            }
+        });
+
+        timeline?.addEventListener('click', (e) => {
+            const target = e.target;
+            if (!(target instanceof Element)) return;
+            const step = target.closest(`.${DOM.timelineStep}`);
+            if (!step) return;
+
+            deactivateSteps();
+            activateCurrentStep(step);
+
+            recalcStepActiveMarkerProps();
+
+            deactivateSlides();
+            activateCurrentSlide();
+        });
+
+        // tiny extra: on any slide change, ensure container height
+        // (already inside activateCurrentSlide)
+    })();
+</script>
+
+<!-- small note: original comment block preserved but not needed -->
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Larger cubes · very slow spin · wide spacing</title>
+    <style>
+        /* ================================= 
+          Base Element Styles – bigger cubes, wider gaps
+        ==================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font: 1em/1.5 'Open Sans', sans-serif;
+            color: #373737;
+            margin: 0;
+            background: #eef2f7;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        h1, h2, h3 {
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 1.125em;
+            color: #4a89ca;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        h3 {
+            font-size: 1.3em;
+            line-height: 1.25em;
+            margin-top: .85em;
+            margin-bottom: .5em;
+            color: white;
+        }
+
+        p {
+            font-size: .875em;
+            line-height: 1.4;
+            margin: 0 0 1.2em;
+            color: #f0f0f0;
+        }
+
+        /* ---- Layout containers (updated for max spacing) ---- */
+        .container {
+            width: 100%;
+            padding: 0 2.5em 5em;
+            margin: auto;
+        }
+
+        .main-header {
+            text-align: center;
+            padding: 2.8em 0 3.8em;
+        }
+
+        /* bigger cubes: main container width 300px for extra presence */
+        .cube-container {
+            width: 300px;               /* even slightly larger than before */
+            text-align: center;
+            margin: 0 auto 5em;          /* more vertical space */
+            box-shadow: 0 25px 50px 10px rgba(0, 0, 0, 0.3);
+            perspective: 1200px;          /* adapted for larger cube */
+        }
+
+        /* ---- Page elements ---- */
+        .name {
+            font-size: 1.65em;
+            font-weight: 800;
+            margin: 0 0 1.5em;
+            line-height: 1;
+            color: #1f3a5f;
+        }
+        .name span {
+            font-weight: 300;
+            margin-left: -7px;
+            color: #4a89ca;
+        }
+
+        .button {
+            font-size: .8em;
+            color: #fff;
+            width: 80%;
+            line-height: 1.2;
+            font-weight: 700;
+            display: block;
+            text-decoration: none;
+            text-transform: uppercase;
+            padding: .9em 0;
+            border-radius: 2.5em;
+            background: rgba(74, 137, 202, 0.95);
+            margin: 1.5em auto 1em;
+            transition: background 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .button:hover {
+            background: #0f3b5e;
+            transform: scale(1.02);
+        }
+
+        /* ---- Photo cube 3D styles (bigger dimensions) ---- */
+        .photo-cube {
+            width: 300px;               /* increased from 280px to 300px */
+            height: 280px;               /* increased proportionally */
+            transform-style: preserve-3d;
+            /* ⬇️ MUCH SLOWER: 3.8 seconds for a full rotation feels deliberate */
+            transition: transform 3.8s cubic-bezier(0.15, 0.85, 0.3, 1.05);
+            position: relative;
+        }
+
+        /* all faces share absolute positioning and new size */
+        .front, .back, .left, .right {
+            width: 300px;
+            height: 280px;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            object-fit: cover;            /* images fill the face without distortion */
+        }
+
+        /* depth calculation: we keep depth around 240px so 120px half-depth */
+        .front {
+            transform: translate3d(0, 0, 120px);
+        }
+
+        .back {
+            transform: translateZ(-120px) rotateY(270deg);
+            transform-origin: center left;
+            background: #1a3d5c;
+        }
+
+        .left {
+            transform: rotateY(-270deg) translate3d(120px, 0, 0);
+            transform-origin: top right;
+        }
+
+        .right {
+            transform: translateZ(-120px) rotateY(180deg);
+        }
+
+        .photo-cube:hover {
+            transform: rotateY(-270deg);
+        }
+
+        /* photo-desc inside back face — better spacing */
+        .photo-desc {
+            font-size: .95em;
+            color: #fff;
+            padding: 1.8em 1.5em 0;
+            background: #124061;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .photo-desc h3 {
+            margin-top: 0.3em;
+            margin-bottom: 0.4em;
+            font-size: 1.6rem;
+        }
+
+        .photo-desc p {
+            font-size: 1rem;
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        /* ---- clearfix ---- */
+        .clearfix::after {
+            content: " ";
+            display: table;
+            clear: both;
+        }
+
+        /* ================================= 
+          MEDIA QUERIES – ENORMOUS SPACE BETWEEN CUBES
+        ==================================== */
+
+        /* on tablets and up: use flex with huge gap */
+        @media (min-width: 769px) {
+            .content {
+                max-width: 1300px;         /* allow wide spread */
+                margin: 0 auto;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-evenly; /* key: even horizontal spacing */
+                align-items: flex-start;
+                gap: 5vw 6rem;              /* huge gap: 6rem column gap, 5vw row gap */
+            }
+
+            .cube-container {
+                /* remove floats, use block inside flex */
+                float: none;
+                margin: 0;                  /* margin controlled by gap */
+                width: 300px;
+                flex-shrink: 0;
+            }
+        }
+
+        /* even wider screens -> keep huge gap */
+        @media (min-width: 1400px) {
+            .content {
+                gap: 8rem;                  /* exceptionally wide on big monitors */
+            }
+        }
+
+        /* ensure first/last no extra margin issues */
+        .cube-container:first-child,
+        .cube-container:last-child {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        img {
+            display: block;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="main-header clearfix">
+            <h1 class="name">our  <span>activities</span></h1>
+        </header>
+
+        <!-- content uses flex + huge gap -->
+        <div class="content clearfix">
+
+            <!-- CUBE 1 - larger & spacious -->
+            <div class="cube-container">
+                <div class="photo-cube">
+                    <img class="front" src="https://i.pinimg.com/1200x/42/ae/c8/42aec8f6d99b6eb58b982d5f82c860b2.jpg" alt="Earth view">
+                    <div class="back photo-desc">
+                        <h3>Earth from Space</h3>
+                        <p>Aenean lacinia bibendum nulla sed consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+                        <a href="#" class="button">download</a>
+                    </div>
+                    <img class="left" src="https://i.pinimg.com/1200x/59/63/0e/59630e6a631b0c095492bf4864cdaf62.jpg" alt="Astronaut">
+                    <img class="right" src="https://i.pinimg.com/736x/1b/58/e5/1b58e5d758977246f819b59abfbd6eb4.jpg" alt="Rocket">
+                </div>
+            </div>
+
+            <!-- CUBE 2 - larger & spacious -->
+            <div class="cube-container">
+                <div class="photo-cube">
+                    <img class="front" src="https://i.pinimg.com/736x/1b/f0/ea/1bf0ea1852209e3cd86caea85a382941.jpg" alt="Nebula">
+                    <div class="back photo-desc">
+                        <h3>Space Images</h3>
+                        <p>Aenean lacinia bibendum nulla sed consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+                        <a href="#" class="button">download</a>
+                    </div>
+                    <img class="left" src="https://i.pinimg.com/736x/aa/05/ff/aa05ff3ee00176c2ba2e19d4ab6e1ad9.jpg" alt="Planet">
+                    <img class="right" src="https://i.pinimg.com/736x/c4/20/ef/c420efd1b8c50a2215eba9c2459a80c5.jpg" alt="Observatory">
+                </div>
+            </div>
+
+            <!-- CUBE 3 - larger & spacious -->
+            <div class="cube-container">
+                <div class="photo-cube">
+                    <img class="front" src="https://i.pinimg.com/736x/9a/21/c3/9a21c3754431d5a54c479fdc8618cf2a.jpg" alt="Galaxy">
+                    <div class="back photo-desc">
+                        <h3>The Milky Way</h3>
+                        <p>Aenean lacinia bibendum nulla sed consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+                        <a href="#" class="button">download</a>
+                    </div>
+                    <img class="left" src="https://i.pinimg.com/736x/14/6e/a7/146ea71b5ea7b5e421809e60b713bdad.jpg" alt="Star field">
+                    <img class="right" src="https://i.pinimg.com/736x/db/e9/1a/dbe91aa9a5a686f6fa428e442e14c8d7.jpg" alt="Aurora">
+                </div>
+            </div>
+
+        </div> <!-- end content -->
+    </div> <!-- end container -->
+</body>
+</html>

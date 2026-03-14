@@ -1,0 +1,238 @@
+
+.Universe {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 70vh;
+  margin-top: 50px;
+  padding: 20px;
+  background: linear-gradient(-45deg, #e3f2fd, #f0f8ff, #e1f5fe, #f0f9ff);
+  background-size: 400% 400%;
+  animation: gradientBG 12s ease infinite;
+  opacity: 0;
+  transform: translateY(80px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.showUniverse {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.Universe::before,
+.Universe::after {
+  content: "";
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.6;
+  z-index: 0;
+  animation: floatBlob 8s ease-in-out infinite alternate;
+}
+
+.Universe::before {
+  background: #90caf9;
+  top: -100px;
+  right: -100px;
+}
+
+.Universe::after {
+  background: #4fc3f7;
+  bottom: -120px;
+  left: -120px;
+  animation-delay: 2s;
+}
+
+@keyframes floatBlob {
+  0% { transform: translateY(0px) scale(1); }
+  100% { transform: translateY(40px) scale(1.1); }
+}
+
+.h1universe {
+  position: relative;
+  margin-bottom: 40px;
+  text-align: center;
+  font-size: 3em;
+  font-weight: 700;
+  background: linear-gradient(270deg, #f2f9ff, #97dafe, #00b4d8, #0b2f4e);
+  background-size: 600% 600%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 8s ease infinite;
+  z-index: 2;
+}
+
+.containeruniverse {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  perspective: 500px;
+  width: 100%;
+  max-width: 1200px;
+  gap: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.boxuniverse {
+  position: relative;
+  width: 22%;
+  min-width: 250px;
+  background: #000;
+  overflow: hidden;
+  transition: 0.5s;
+  transform-style: preserve-3d;
+  height: 275px;
+  flex: 1 1 250px;
+  opacity: 0;
+  transition: transform 1s ease, opacity 1s ease;
+}
+
+.leftCard {
+  transform: translateX(-120px);
+}
+
+.rightCard {
+  transform: translateX(120px);
+}
+
+.showCard {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.containeruniverse:hover .boxuniverse {
+  transform: rotateY(25deg);
+}
+
+.containeruniverse .boxuniverse:hover ~ .boxuniverse {
+  transform: rotateY(-25deg);
+}
+
+.containeruniverse .boxuniverse:hover {
+  transform: rotateY(0deg) scale(1.1);
+  z-index: 1;
+  box-shadow: 0 25px 40px rgba(0,0,0,0.5);
+}
+
+.imgBx {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.imgBx:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #48B1D8, transparent);
+  z-index: 1;
+  opacity: 0;
+  transition: 0.5s;
+  mix-blend-mode: multiply;
+}
+
+.boxuniverse:hover .imgBx:before {
+  opacity: 1;
+}
+
+.imgBx img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contentuniverse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  padding: 20px;
+  align-items: flex-end;
+  box-sizing: border-box;
+}
+
+.h2universe {
+  color: #fff;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  font-size: 1.2em;
+  transform: translateY(200px);
+  transition: 0.5s 0.3s;
+}
+
+.boxuniverse:hover .h2universe {
+  transform: translateY(0);
+}
+
+.contentuniverse p {
+  color: #fff;
+  font-size: 0.9em;
+  transform: translateY(200px);
+  transition: 0.5s 0.4s;
+}
+
+.boxuniverse:hover p {
+  transform: translateY(0);
+}
+
+@media (max-width: 1024px) {
+  .boxuniverse {
+    width: 30%;
+    height: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .containeruniverse {
+    gap: 15px;
+  }
+  .boxuniverse {
+    width: 45%;
+    height: 220px;
+  }
+  .h1universe {
+    font-size: 1.8em;
+  }
+}
+
+@media (max-width: 480px) {
+  .boxuniverse {
+    width: 90%;
+    height: 200px;
+  }
+  .h1universe {
+    font-size: 1.5em;
+  }
+  .contentuniverse {
+    padding: 15px;
+  }
+  .h2universe {
+    font-size: 1em;
+  }
+  .contentuniverse p {
+    font-size: 0.8em;
+  }
+}
