@@ -11,10 +11,10 @@ import 'swiper/css/autoplay';
 import { Autoplay, Navigation } from 'swiper/modules';
 
 const HistoryCarousel = () => {
-  const swiperRef = useRef(null);
-  const fixedTitleRef = useRef(null);
-  const fixedInfoRef = useRef(null);
-  const sectionRef = useRef(null);
+  const swiperRef = useRef<any>(null);
+  const fixedTitleRef = useRef<HTMLDivElement>(null);
+  const fixedInfoRef = useRef<HTMLHeadingElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -45,32 +45,39 @@ const HistoryCarousel = () => {
     // Define updateSlideContent function first
     const updateSlideContent = () => {
       const activeSlide = document.querySelector(".swiper-slide-active");
-      
       if (!activeSlide) return;
-      
+
       const slideLink = activeSlide.querySelector("a")?.getAttribute("href") || "#";
       const slideTitle = activeSlide.querySelector("h1")?.textContent || "";
       const slideSubtitle = activeSlide.querySelector("h2")?.textContent || "";
       const additionalInfo = activeSlide.querySelector(".additional-info")?.innerHTML || "";
-      
-      const slideLinkElement = fixedTitleRef.current?.querySelector("a");
-      const slideTitleElement = fixedTitleRef.current?.querySelector("h1");
-      const slideSubtitleElement = fixedTitleRef.current?.querySelector("h2");
-      
-      if (slideLinkElement) slideLinkElement.setAttribute("href", slideLink);
-      if (slideTitleElement) slideTitleElement.textContent = slideTitle;
-      if (slideSubtitleElement) {
-        slideSubtitleElement.textContent = slideSubtitle;
-        slideSubtitleElement.setAttribute("data-title", slideSubtitle);
+
+      const fixedTitle = fixedTitleRef.current;
+      const fixedInfo = fixedInfoRef.current;
+
+      if (fixedTitle) {
+        const slideLinkElement = fixedTitle.querySelector("a");
+        const slideTitleElement = fixedTitle.querySelector("h1");
+        const slideSubtitleElement = fixedTitle.querySelector("h2");
+
+        if (slideLinkElement) slideLinkElement.setAttribute("href", slideLink);
+        if (slideTitleElement) slideTitleElement.textContent = slideTitle;
+        if (slideSubtitleElement) {
+          slideSubtitleElement.textContent = slideSubtitle;
+          slideSubtitleElement.setAttribute("data-title", slideSubtitle);
+        }
       }
-      if (fixedInfoRef.current) fixedInfoRef.current.innerHTML = additionalInfo;
+
+      if (fixedInfo) {
+        fixedInfo.innerHTML = additionalInfo;
+      }
     };
 
     // Initialize Swiper only when section is visible
     if (isVisible && !swiperRef.current) {
       // Register Swiper modules
       Swiper.use([Autoplay, Navigation]);
-      
+
       const swiper = new Swiper(".slider-carousel", {
         slidesPerView: "auto",
         spaceBetween: 0,
@@ -98,23 +105,23 @@ const HistoryCarousel = () => {
           prevEl: '.slider-carousel-prev',
         },
         on: {
-          init: function() {
+          init: function () {
             console.log('Swiper initialized with autoplay (3 seconds)');
             updateSlideContent();
-            
+
             setTimeout(() => {
               fixedTitleRef.current?.classList.add("eltdf-fixed-title-animate-in");
               fixedInfoRef.current?.classList.add("eltdf-fixed-info-animate-in");
             }, 300);
           },
-          slideChangeTransitionStart: function() {
+          slideChangeTransitionStart: function () {
             fixedTitleRef.current?.classList.remove("eltdf-fixed-title-animate-in");
             fixedInfoRef.current?.classList.remove("eltdf-fixed-info-animate-in");
-            
+
             setTimeout(() => {
               updateSlideContent();
             }, 700);
-            
+
             setTimeout(() => {
               fixedTitleRef.current?.classList.add("eltdf-fixed-title-animate-in");
               fixedInfoRef.current?.classList.add("eltdf-fixed-info-animate-in");
