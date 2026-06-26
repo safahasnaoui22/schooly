@@ -176,8 +176,8 @@ const Inscription: React.FC = () => {
   const [step2Error, setStep2Error] = useState<string>('');
   const [step3Error, setStep3Error] = useState<string>('');
   
-  // Refs
-  const saveTimeout = useRef<NodeJS.Timeout>();
+  // Refs – FIXED: use ReturnType<typeof setTimeout>
+  const saveTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const totalSteps = 4;
 
@@ -217,10 +217,12 @@ const Inscription: React.FC = () => {
 
   // Debounced auto-save
   useEffect(() => {
-    clearTimeout(saveTimeout.current);
+    if (saveTimeout.current) clearTimeout(saveTimeout.current);
     saveTimeout.current = setTimeout(autoSaveDraft, 1000);
     
-    return () => clearTimeout(saveTimeout.current);
+    return () => {
+      if (saveTimeout.current) clearTimeout(saveTimeout.current);
+    };
   }, [phone, city, street, children, medicalNote, currentStep, currentLang, autoSaveDraft]);
 
   // Load draft from localStorage
@@ -412,9 +414,8 @@ const Inscription: React.FC = () => {
   const t = translations[currentLang];
 
   return (
-    <body >
-      <div className="inscription-body">
-        {/* Floating decorative shapeIs */}
+    <div className="inscription-body">
+      {/* Floating decorative shapes */}
       <div className="floating-shapeI shapeI-1"></div>
       <div className="floating-shapeI shapeI-2"></div>
       <div className="floating-shapeI shapeI-3"></div>
@@ -666,8 +667,8 @@ const Inscription: React.FC = () => {
         </div>
       </div>
 
-      {/* Add keyframe animations style */}
-      <style jsx>{`
+      {/* Keyframe animation for confetti */}
+      <style>{`
         @keyframes confettiFall {
           to {
             transform: translateY(100vh) rotate(${Math.random() * 720}deg);
@@ -675,9 +676,7 @@ const Inscription: React.FC = () => {
           }
         }
       `}</style>
-      </div>
-      
-    </body>
+    </div>
   );
 };
 
