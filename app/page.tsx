@@ -55,7 +55,13 @@ export default function Home() {
       </div>
     
       <HeroSection />
-        <SchoolStats />
+      <br>
+      </br>
+      <br>
+      </br>
+      <br>
+      </br>
+      
 
    <ClassesSection />
       
@@ -68,7 +74,6 @@ export default function Home() {
 
 <Partenaire/>
 
-  <Gallery />
 
 
 

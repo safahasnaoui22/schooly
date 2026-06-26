@@ -7,11 +7,11 @@ const SchoolStats = () => {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const counters = document.querySelectorAll(".counter");
+    const counters = document.querySelectorAll<HTMLElement>('.counter');
 
     function animateCounters() {
-      counters.forEach(counter => {
-        const target = Number(counter.getAttribute("data-target"));
+      counters.forEach((counter) => {
+        const target = Number(counter.getAttribute('data-target'));
         let count = 0;
         const step = target / 120;
 
@@ -21,21 +21,24 @@ const SchoolStats = () => {
             counter.innerText = Math.ceil(count).toString();
             requestAnimationFrame(update);
           } else {
-            counter.innerText = target + "+";
+            counter.innerText = target.toString();
           }
         }
         update();
       });
     }
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateCounters();
-          observer.disconnect();
-        }
-      });
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCounters();
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
 
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
@@ -46,111 +49,221 @@ const SchoolStats = () => {
     };
   }, []);
 
+  const styles = `
+    /* ---------- STATISTICS BAR (Redesigned) ---------- */
+    .stats-bar {
+      margin-top: -20px;
+      position: relative;
+      z-index: 2;
+      padding-bottom: 20px;
+    }
+
+    .stats-bar .stats-wrapper {
+      background: linear-gradient(145deg, #0b1a3a, #112a5a);
+      border-radius: 20px;
+      padding: 24px 30px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      box-shadow: 0 20px 60px rgba(7, 27, 74, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(2px);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .stats-bar .stats-wrapper:hover {
+      box-shadow: 0 24px 70px rgba(7, 27, 74, 0.5);
+    }
+
+    .stat-item {
+      text-align: center;
+      color: #ffffff;
+      padding: 12px 8px;
+      border-right: 1px solid rgba(255, 255, 255, 0.07);
+      transition: transform 0.25s ease, background 0.25s ease;
+      border-radius: 12px;
+      cursor: default;
+    }
+
+    .stat-item:last-child {
+      border-right: none;
+    }
+
+    .stat-item:hover {
+      transform: translateY(-4px) scale(1.02);
+      background: rgba(255, 215, 0, 0.06);
+      border-right-color: transparent;
+    }
+
+    .stat-item:last-child:hover {
+      border-right: none;
+    }
+
+    .stat-item .stat-icon {
+      font-size: 24px;
+      color: #c9a84c;
+      margin-bottom: 6px;
+      display: block;
+      opacity: 0.8;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .stat-item:hover .stat-icon {
+      opacity: 1;
+      transform: scale(1.1) rotate(-2deg);
+    }
+
+    .stat-item .number {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 3vw, 38px);
+      font-weight: 700;
+      display: block;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 60%, #f0e6c5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-item .number .gold {
+      color: #c9a84c;
+      -webkit-text-fill-color: #c9a84c;
+      font-weight: 700;
+    }
+
+    .stat-item .label {
+      font-size: 12px;
+      opacity: 0.7;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-top: 4px;
+      display: block;
+      color: rgba(255, 255, 255, 0.8);
+      transition: opacity 0.3s ease;
+    }
+
+    .stat-item:hover .label {
+      opacity: 1;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 768px) {
+      .stats-bar .stats-wrapper {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 16px 20px;
+        gap: 12px;
+      }
+
+      .stat-item {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 12px 6px;
+      }
+
+      .stat-item:nth-last-child(-n+2) {
+        border-bottom: none;
+      }
+
+      .stat-item .number {
+        font-size: clamp(24px, 5vw, 32px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-bar .stats-wrapper {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        padding: 12px 12px;
+      }
+
+      .stat-item {
+        padding: 10px 4px;
+      }
+
+      .stat-item .stat-icon {
+        font-size: 20px;
+      }
+
+      .stat-item .number {
+        font-size: 22px;
+      }
+
+      .stat-item .label {
+        font-size: 10px;
+        letter-spacing: 0.2px;
+      }
+    }
+
+    /* ---------- (Optional) container class if not globally defined ---------- */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+  `;
+
   return (
-    <section className="school-stats" ref={sectionRef}>
-      <div className="container">
-   
-     
-
-        <div className="stats-grid">
-          <div className="stat-card">
-            <h3 className="counter" data-target="500">0</h3>
-            <span>Élèves accompagnés</span>
-          </div>
-
-          <div className="stat-card">
-            <h3 className="counter" data-target="20">0</h3>
-            <span>Enseignants qualifiés</span>
-          </div>
-
-          <div className="stat-card">
-            <h3 className="counter" data-target="15">0</h3>
-            <span>Classes modernes</span>
-          </div>
-
-          <div className="stat-card">
-            <h3 className="counter" data-target="95">0</h3>
-            <span>Réussite scolaire</span>
+    <>
+      <section className="stats-bar" ref={sectionRef}>
+        <div className="container">
+          <div className="stats-wrapper">
+            <div className="stat-item">
+              <span className="stat-icon">
+                <i className="fas fa-award"></i>
+              </span>
+              <span className="number">
+                <span className="counter" data-target="18">0</span>
+                <span className="gold">+</span>
+              </span>
+              <span className="label">Years of Excellence</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-icon">
+                <i className="fas fa-users"></i>
+              </span>
+              <span className="number">
+                <span className="counter" data-target="620">0</span>
+                <span className="gold">+</span>
+              </span>
+              <span className="label">Happy Students</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-icon">
+                <i className="fas fa-chalkboard-teacher"></i>
+              </span>
+              <span className="number">
+                <span className="counter" data-target="48">0</span>
+                <span className="gold">+</span>
+              </span>
+              <span className="label">Certified Teachers</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-icon">
+                <i className="fas fa-user-friends"></i>
+              </span>
+              <span className="number">
+                <span className="counter" data-target="12">0</span>
+                <span className="gold">:1</span>
+              </span>
+              <span className="label">Student-Teacher Ratio</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-icon">
+                <i className="fas fa-heart"></i>
+              </span>
+              <span className="number">
+                <span className="counter" data-target="98">0</span>
+                <span className="gold">%</span>
+              </span>
+              <span className="label">Parent Satisfaction</span>
+            </div>
           </div>
         </div>
-      </div>
-
-      <style jsx>{`
-        .school-stats {
-          padding: 100px 0;
-          text-align: center;
-          background: linear-gradient(180deg, #f8fbff, #ffffff);
-          height : 50vh ;
-        }
-
-        .stats-title {
-          font-size: 38px;
-          color: #0e4a67;
-          margin-bottom: 10px;
-        }
-
-        .stats-subtitle {
-          color: #6c7a86;
-          margin-bottom: 60px;
-        }
-
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 40px;
-        }
-
-        .stat-card {
-          padding: 30px;
-          border-radius: 18px;
-        
-          transition: all 0.4s ease;
-        }
-
-        .stat-card:hover {
-          transform: translateY(-8px);
-        }
-
-        /* 3D numbers */
-        .stat-card h3 {
-          font-size: 60px;
-          font-weight: 800;
-          background: linear-gradient(135deg, #1c7fa6, #4fb3d8);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          text-shadow: 0 3px 0 rgba(0, 0, 0, 0.05),
-                       0 6px 15px rgba(0, 0, 0, 0.1);
-          margin-bottom: 10px;
-        }
-
-        .stat-card span {
-          color: #6c7a86;
-          font-size: 16px;
-        }
-
-        @media (max-width: 768px) {
-          .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-          }
-          
-          .stats-title {
-            font-size: 28px;
-          }
-          
-          .stat-card h3 {
-            font-size: 40px;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .stats-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
-    </section>
+      </section>
+      <style dangerouslySetInnerHTML={{ __html: styles }} />
+    </>
   );
 };
 

@@ -67,7 +67,7 @@ const translations: Translations = {
     step3: 'Santé + docs',
     step4: 'Final',
     phone: 'Téléphone',
-    city: 'Ville / Délégation',
+    city: 'address',
     street: 'Rue & numéro',
     children: 'Vos enfants',
     addChild: 'Ajouter un enfant',
@@ -98,7 +98,7 @@ const translations: Translations = {
     step3: 'Health + docs',
     step4: 'Final',
     phone: 'Phone',
-    city: 'City / Delegation',
+    city: 'address',
     street: 'Street & number',
     children: 'Your children',
     addChild: 'Add a child',
@@ -164,7 +164,7 @@ const Inscription: React.FC = () => {
   
   // Form fields
   const [phone, setPhone] = useState<string>('52 555 789');
-  const [city, setCity] = useState<string>('Sfax');
+  const [city, setCity] = useState<string>('TEBOLBA');
   const [street, setStreet] = useState<string>('Route de la plage 7');
   const [medicalNote, setMedicalNote] = useState<string>('Youssef : allergie aux arachides');
   
@@ -412,8 +412,9 @@ const Inscription: React.FC = () => {
   const t = translations[currentLang];
 
   return (
-    <body className="inscription-body">
-      {/* Floating decorative shapeIs */}
+    <body >
+      <div className="inscription-body">
+        {/* Floating decorative shapeIs */}
       <div className="floating-shapeI shapeI-1"></div>
       <div className="floating-shapeI shapeI-2"></div>
       <div className="floating-shapeI shapeI-3"></div>
@@ -674,6 +675,8 @@ const Inscription: React.FC = () => {
           }
         }
       `}</style>
+      </div>
+      
     </body>
   );
 };

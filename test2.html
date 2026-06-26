@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>U Cabinet | Strategic Influence & Development</title>
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+  <!-- Animate.css for refined corporate animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <style>
+    /* ----- RESET & GLOBAL ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      font-family: 'Poppins', 'Inter', system-ui, -apple-system, sans-serif;
+      transition: background-color 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+
+    body {
+      background-color: #0A1428; /* deep corporate base */
+    }
+
+    /* ----- PROGRESS INDICATORS (elevated) ----- */
+    .autoplay-progress {
+      position: fixed;
+      left: 28px;
+      top: 28px;
+      z-index: 50;
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      font-size: 12px;
+      color: var(--progress-color, #FFFFFF);
+      backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.2);
+      border-radius: 60px;
+      transition: color 0.3s;
+    }
+    .autoplay-progress svg {
+      --progress: 0;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      stroke-width: 2.2;
+      stroke: var(--progress-color, #FFFFFF);
+      fill: none;
+      stroke-dashoffset: calc(125.6px * (1 - var(--progress)));
+      stroke-dasharray: 125.6;
+      transform: rotate(-90deg);
+    }
+    .autoplay-progress-bar {
+      --progress: 0;
+      height: 3px;
+      width: var(--progress);
+      background-color: var(--progress-color, #FFFFFF);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 60;
+      transition: width 0.08s linear;
+      box-shadow: 0 0 6px rgba(0,0,0,0.2);
+    }
+
+    /* ----- MAIN SLIDER LAYOUT ----- */
+    .swiper {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    .container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ----- CARD (Corporate Identity) ----- */
+    .card {
+      position: relative;
+      margin: auto;
+      height: 80vh;
+      width: 90vw;
+      max-width: 1280px;
+      border-radius: 48px;
+      overflow: hidden;
+      backdrop-filter: blur(2px);
+      box-shadow: 0 35px 68px rgba(0, 0, 0, 0.35), 0 8px 18px rgba(0, 0, 0, 0.2);
+      transition: transform 0.4s ease;
+    }
+    /* refined gradients matching strategic seriousness + ambition */
+    .card.slide-1 { background: linear-gradient(135deg, #0B1A2E, #07121F); }
+    .card.slide-2 { background: linear-gradient(135deg, #13213A, #0A1025); }
+    .card.slide-3 { background: linear-gradient(135deg, #0C1C2A, #04121C); }
+
+    /* SVG wrapper (abstract emblem / visual metaphor for international networks) */
+    .svg-wrapper {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      opacity: 0.45;
+      transition: opacity 0.5s;
+    }
+    .slide:nth-child(odd) .svg-wrapper { left: -18%; top: -10%; }
+    .slide:nth-child(even) .svg-wrapper { right: -18%; top: -5%; }
+    .slide svg {
+      max-height: 85%;
+      width: auto;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    }
+    /* subtle floating effect for dynamic prestige */
+    .floating-svg {
+      animation: floatEmblem 8s ease-in-out infinite;
+    }
+
+    /* ----- CARD CONTENT (Strategic Messaging) ----- */
+    .card-content {
+      max-width: 520px;
+      width: 100%;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 0 40px;
+      z-index: 12;
+    }
+    .slide:nth-child(odd) .card-content { margin-left: auto; text-align: right; }
+    .slide:nth-child(even) .card-content { margin-right: auto; margin-left: 8%; text-align: left; }
+
+    /* Subtitle (tagline) */
+    .card-sub-title {
+      color: var(--color, #FFFFFF);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.12);
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 40px;
+      backdrop-filter: blur(2px);
+    }
+    /* Title (glitch-free but premium) */
+    .card-title {
+      font-size: 3.2vw;
+      font-weight: 800;
+      line-height: 1.2;
+      margin: 24px 0 20px;
+      text-transform: uppercase;
+      color: var(--color, #FFFFFF);
+      letter-spacing: -0.02em;
+      position: relative;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .card-description {
+      color: rgba(255,255,255,0.85);
+      font-weight: 400;
+      font-size: 1rem;
+      max-width: 380px;
+      line-height: 1.5;
+      backdrop-filter: blur(2px);
+    }
+    .card-cta {
+      margin-top: 40px;
+    }
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 36px;
+      background-color: var(--color, #FF5B79);
+      color: white;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      text-decoration: none;
+      border-radius: 60px;
+      transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+    }
+    .cta-button:hover {
+      background-color: #FFFFFF;
+      color: var(--color, #FF5B79);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 28px rgba(0,0,0,0.25);
+    }
+
+    /* Ghost info -> Corporate Badge / Influence stats */
+    .card-ghost-info {
+      position: absolute;
+      bottom: 8%;
+      line-height: 1.2;
+      color: #FFFFFF;
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 12;
+    }
+    .ghost-name {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .card-ghost-info span {
+      height: 48px;
+      width: 2px;
+      background-color: var(--color, white);
+      position: absolute;
+      bottom: 0px;
+      opacity: 0.7;
+    }
+    .card-ghost-info span:before {
+      content: "";
+      height: 6px;
+      width: 6px;
+      background-color: var(--color, white);
+      position: absolute;
+      top: 0px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 50%;
+    }
+    .slide:nth-child(odd) .card-ghost-info { left: 8%; text-align: right; }
+    .slide:nth-child(even) .card-ghost-info { right: 8%; text-align: left; }
+    .slide:nth-child(odd) .card-ghost-info span { right: -20px; }
+    .slide:nth-child(even) .card-ghost-info span { left: -20px; }
+
+    /* ----- Navigation Buttons (sleek, corporate) ----- */
+    .slider-button {
+      position: absolute;
+      width: 100px;
+      z-index: 20;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .slider-button svg { display: block; width: 100%; }
+    .slider-button circle { stroke: var(--progress-color, white); stroke-width: 2; fill: none; transition: 0.3s; }
+    .slider-button .slider-svg-arrow { fill: var(--progress-color, white); transform: rotateY(180deg) translate(-55px, 36px) scale(1.6); }
+    .slider-button-prev { left: 20px; }
+    .slider-button-next { right: 20px; }
+    .slider-button-next .slider-svg-wrap { transform: translateY(353px) rotateY(180deg); transform-origin: 80px 0; }
+    .slider-button:not(.swiper-button-disabled):hover { filter: drop-shadow(0 0 6px currentColor); }
+    .slider-button:not(.swiper-button-disabled):hover circle { stroke-dasharray: 5; stroke-dashoffset: 5; }
+    .swiper-button-disabled { opacity: 0.3; cursor: default; }
+
+    /* Pagination (elevated) */
+    .swiper-pagination {
+      bottom: 28px !important;
+      z-index: 20;
+    }
+    .swiper-pagination-bullet {
+      width: 28px;
+      height: 4px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 4px;
+      transition: 0.3s;
+    }
+    .swiper-pagination-bullet-active {
+      background: var(--progress-color, white);
+      width: 48px;
+    }
+
+    /* Mouse scroll indicator (corporate style) */
+    .mouse-scroll {
+      position: fixed;
+      bottom: 24px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: var(--progress-color, #fff);
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      z-index: 30;
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.3), transparent);
+      width: fit-content;
+      margin: 0 auto;
+      padding: 4px 16px;
+      border-radius: 40px;
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+    .mouse {
+      width: 26px;
+      height: 40px;
+      border-radius: 20px;
+      border: 2px solid var(--progress-color);
+      margin: 0 auto 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .mouse .roll {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      width: 4px;
+      margin-left: -2px;
+      height: 4px;
+      background: var(--progress-color);
+      border-radius: 4px;
+      animation: mouseScroll 1.2s cubic-bezier(0.7, 0, 0.3, 1) infinite alternate;
+    }
+
+    /* Animation keyframes */
+    @keyframes floatEmblem {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(20px) rotate(2deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+    @keyframes mouseScroll {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(18px); opacity: 0.4; }
+    }
+
+    /* Responsive refinements */
+    @media (max-width: 900px) {
+      .card-content { max-width: 90%; padding: 0 20px; }
+      .card-title { font-size: 7vw; }
+      .card-sub-title { font-size: 10px; }
+      .card-description { font-size: 12px; max-width: 100%; }
+      .slide:nth-child(odd) .card-content, .slide:nth-child(even) .card-content { text-align: center; margin: 0 auto; top: 60%; transform: translateY(-50%); }
+      .svg-wrapper { opacity: 0.3; transform: scale(0.7); top: 5% !important; left: 0 !important; right: 0 !important; }
+      .ghost-name { font-size: 16px; }
+      .card-ghost-info { bottom: 5%; }
+      .slider-button { width: 60px; }
+      .mouse-scroll { display: none; }
+    }
+
+    /* additional slide entrance animations (corporate elegance) */
+    .swiper-slide-active .card-title { animation: fadeInUp 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards; }
+    .swiper-slide-active .card-sub-title { animation: fadeInUp 0.7s ease forwards; animation-delay: 0.1s; opacity: 0; animation-fill-mode: forwards; }
+    .swiper-slide-active .card-description { animation: fadeInUp 0.8s ease forwards; animation-delay: 0.2s; opacity: 0; animation-fill-mode: forwards; }
+    .swiper-slide-active .card-cta { animation: fadeInUp 0.7s ease forwards; animation-delay: 0.3s; opacity: 0; animation-fill-mode: forwards; }
+    .swiper-slide-active .card-ghost-info { animation: fadeInLeft 0.9s ease forwards; opacity: 0; animation-fill-mode: forwards; animation-delay: 0.2s; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInLeft {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="autoplay-progress">
+  <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20"></circle></svg>
+  <span></span>
+</div>
+<div class="autoplay-progress-bar"></div>
+
+<div class="container">
+  <div class="swiper">
+    <div class="slide-container swiper-wrapper">
+      
+      <!-- SLIDE 1 : Strategic Influence / Geopolitical Architecture -->
+      <div class="slide swiper-slide" data-progress-color="#5C9EFF" data-bg-color="#071725">
+        <div class="card slide-1">
+          <div class="svg-wrapper">
+            <svg class="floating-svg" width="480" height="480" viewBox="0 0 480 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="240" cy="240" r="180" stroke="url(#grad1)" stroke-width="2" fill="none" stroke-dasharray="8 6"/>
+              <path d="M240 80 L240 400 M80 240 L400 240" stroke="url(#grad1)" stroke-width="1.5" stroke-dasharray="5 3"/>
+              <circle cx="240" cy="240" r="30" fill="rgba(92,158,255,0.2)" stroke="#5C9EFF" stroke-width="1.5"/>
+              <path d="M240 140 L260 180 L240 220 L220 180 Z" fill="#5C9EFF" opacity="0.7"/>
+              <defs><linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#5C9EFF"/><stop offset="1" stop-color="#B794F4"/></linearGradient></defs>
+            </svg>
+          </div>
+          <div class="card-content">
+            <div class="card-sub-title" style="--color: #5C9EFF;">Strategic Architecture</div>
+            <h2 class="card-title" data-text="INFLUENCE AS INFRASTRUCTURE" style="--color: #FFFFFF;">INFLUENCE AS<br>INFRASTRUCTURE</h2>
+            <p class="card-description" style="--color: rgba(255,255,255,0.9);">We engineer cross-border ecosystems, translating geopolitical complexity into measurable growth. Rigor, foresight, and leverage for leaders who shape tomorrow.</p>
+            <div class="card-cta">
+              <a href="#" class="cta-button" style="--color:#5C9EFF;">Engage now</a>
+            </div>
+          </div>
+          <div class="card-ghost-info">
+            <span style="--color:#5C9EFF;"></span>
+            <div class="ghost-name">U Cabinet</div>
+            <div>Strategy | Influence | Development</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2 : International Development & High-value Opportunities -->
+      <div class="slide swiper-slide" data-progress-color="#E6B450" data-bg-color="#0D1B2A">
+        <div class="card slide-2">
+          <div class="svg-wrapper">
+            <svg class="floating-svg" width="460" height="460" viewBox="0 0 460 460" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M230 60 L280 150 L230 240 L180 150 Z" fill="url(#goldGrad)" fill-opacity="0.3" stroke="#E6B450" stroke-width="1.8"/>
+              <circle cx="230" cy="230" r="110" stroke="#E6B450" stroke-width="1.5" stroke-dasharray="6 4" fill="none"/>
+              <polygon points="230,100 250,140 210,140" fill="#E6B450" opacity="0.7"/>
+              <path d="M170 320 L290 320 M230 260 L230 380" stroke="#E6B450" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <defs><linearGradient id="goldGrad"><stop stop-color="#E6B450"/><stop offset="1" stop-color="#FFD966"/></linearGradient></defs>
+            </svg>
+          </div>
+          <div class="card-content">
+            <div class="card-sub-title" style="--color: #E6B450;">High-value Opportunities</div>
+            <h2 class="card-title" data-text="DEVELOPMENT FRONTIERS" style="--color: #FFFFFF;">DEVELOPMENT<br>FRONTIERS</h2>
+            <p class="card-description" style="--color: rgba(255,255,255,0.9);">We transform strategic expertise into tangible ventures: public-private synergies, investment facilitation, and institutional anchoring across emerging markets.</p>
+            <div class="card-cta">
+              <a href="#" class="cta-button" style="--color:#E6B450;">Explore ventures</a>
+            </div>
+          </div>
+          <div class="card-ghost-info">
+            <span style="--color:#E6B450;"></span>
+            <div class="ghost-name">Global Reach</div>
+            <div>Public affairs | Deal flow</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3 : Rigor & Ambition – Influence Engineering -->
+      <div class="slide swiper-slide" data-progress-color="#86C8DE" data-bg-color="#06131F">
+        <div class="card slide-3">
+          <div class="svg-wrapper">
+            <svg class="floating-svg" width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="150" y="150" width="200" height="200" rx="30" stroke="#86C8DE" stroke-width="2" fill="none" stroke-dasharray="8 6"/>
+              <path d="M250 120 L250 380 M120 250 L380 250" stroke="#86C8DE" stroke-width="1.5" stroke-dasharray="5 3"/>
+              <circle cx="250" cy="250" r="45" stroke="#86C8DE" stroke-width="1.8" fill="url(#blueRadial)"/>
+              <defs><radialGradient id="blueRadial"><stop stop-color="#86C8DE" stop-opacity="0.3"/><stop offset="1" stop-color="#2C6E9E" stop-opacity="0"/></radialGradient></defs>
+            </svg>
+          </div>
+          <div class="card-content">
+            <div class="card-sub-title" style="--color: #86C8DE;">Rigor • Ambition • Results</div>
+            <h2 class="card-title" data-text="STRUCTURING DYNAMICS" style="--color: #FFFFFF;">STRUCTURING<br>DYNAMICS</h2>
+            <p class="card-description" style="--color: rgba(255,255,255,0.9);">From strategic foresight to operational execution, U Cabinet delivers high-impact frameworks that elevate nations, corporations, and institutions into new spheres of influence.</p>
+            <div class="card-cta">
+              <a href="#" class="cta-button" style="--color:#86C8DE;">Partner with us</a>
+            </div>
+          </div>
+          <div class="card-ghost-info">
+            <span style="--color:#86C8DE;"></span>
+            <div class="ghost-name">U Cabinet</div>
+            <div>Influence engineering</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="swiper-pagination"></div>
+    <div class="slider-button-next slider-button">
+      <svg viewBox="0 0 160 90" xmlns="http://www.w3.org/2000/svg">
+        <g class="slider-svg-wrap">
+          <g class="slider-svg-circle-wrap"><circle cx="42" cy="42" r="40"></circle></g>
+          <path class="slider-svg-arrow" d="M.983,6.929,4.447,3.464.983,0,0,.983,2.482,3.464,0,5.946Z"></path>
+          <path class="slider-svg-line" d="M80,0H0"></path>
+        </g>
+      </svg>
+    </div>
+    <div class="slider-button-prev slider-button">
+      <svg viewBox="0 0 160 90" xmlns="http://www.w3.org/2000/svg">
+        <g class="slider-svg-wrap">
+          <g class="slider-svg-circle-wrap"><circle cx="42" cy="42" r="40"></circle></g>
+          <path class="slider-svg-arrow" d="M.983,6.929,4.447,3.464.983,0,0,.983,2.482,3.464,0,5.946Z"></path>
+          <path class="slider-svg-line" d="M80,0H0"></path>
+        </g>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="mouse-scroll">
+  <div class="mouse"><div class="roll"></div></div>
+  explore opportunities
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+<script>
+  (function() {
+    const progressCircle = document.querySelector(".autoplay-progress");
+    const progressBar = document.querySelector(".autoplay-progress-bar");
+
+    const swiperInstance = new Swiper(".swiper", {
+      lazy: true,
+      slidesPerView: 1,
+      spaceBetween: 0,
+      grabCursor: true,
+      effect: "coverflow",
+      speed: 1100,
+      coverflowEffect: {
+        rotate: 45,
+        stretch: 0,
+        depth: 120,
+        modifier: 1.2,
+        slideShadows: false,
+      },
+      mousewheel: { sensitivity: 1, thresholdDelta: 30 },
+      keyboard: { enabled: true },
+      autoplay: {
+        delay: 5500,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+        dynamicBullets: false,
+      },
+      navigation: {
+        nextEl: ".slider-button-next",
+        prevEl: ".slider-button-prev",
+      },
+      on: {
+        autoplayTimeLeft(s, time, progress) {
+          const percent = 1 - progress;
+          if (progressCircle) {
+            progressCircle.querySelector("svg").style.setProperty("--progress", percent);
+            progressCircle.querySelector("span").innerHTML = `${Math.ceil(time / 1000)}s`;
+          }
+          if (progressBar) {
+            progressBar.style.setProperty("--progress", `${percent * 100}%`);
+          }
+        },
+        init(swiper) {
+          updateThemeFromSlide(swiper);
+        },
+        slideChange(swiper) {
+          updateThemeFromSlide(swiper);
+        },
+      },
+    });
+
+    function updateThemeFromSlide(swiper) {
+      const activeSlide = swiper.slides[swiper.activeIndex];
+      if (!activeSlide) return;
+      const bgColor = activeSlide.getAttribute("data-bg-color");
+      const progressColor = activeSlide.getAttribute("data-progress-color");
+      if (bgColor) document.body.style.backgroundColor = bgColor;
+      if (progressColor) {
+        document.body.style.setProperty("--progress-color", progressColor);
+        // also apply to dynamic elements
+        document.querySelectorAll(".cta-button, .slider-button circle, .mouse-scroll").forEach(el => {
+          // inherited via css variable
+        });
+      }
+    }
+
+    // small interactive tweak : initial call to set correct variable
+    setTimeout(() => {
+      if (swiperInstance && swiperInstance.slides[swiperInstance.activeIndex]) {
+        updateThemeFromSlide(swiperInstance);
+      }
+    }, 50);
+  })();
+</script>
+</body>
+</html>

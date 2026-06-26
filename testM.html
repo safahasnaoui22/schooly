@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Qatar Travel UI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#111;
+}
+
+/* CONTAINER */
+.container{
+  width:1200px;
+  height:720px;
+  border-radius:25px;
+  overflow:hidden;
+  position:relative;
+  background:url('https://images.unsplash.com/photo-1580674285054-bed31e145f59?q=80&w=1600') center/cover no-repeat;
+}
+
+/* GRADIENT OVERLAY */
+.container::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg, rgba(0,0,0,0.5), rgba(255,140,80,0.6));
+}
+
+/* NAVBAR */
+.navbar{
+  position:absolute;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:90%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 30px;
+  border-radius:15px;
+  backdrop-filter:blur(15px);
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+  animation:fadeDown 1s ease;
+}
+
+.navbar ul{
+  display:flex;
+  gap:30px;
+  list-style:none;
+}
+
+.navbar li{
+  cursor:pointer;
+  position:relative;
+}
+
+.navbar li::after{
+  content:"";
+  position:absolute;
+  bottom:-5px;
+  left:0;
+  width:0%;
+  height:2px;
+  background:#fff;
+  transition:.3s;
+}
+
+.navbar li:hover::after{
+  width:100%;
+}
+
+/* HERO */
+.hero{
+  position:absolute;
+  top:160px;
+  left:70px;
+  color:#fff;
+}
+
+.hero h1{
+  font-size:64px;
+  font-weight:800;
+  animation:fadeUp 1.2s ease;
+}
+
+.hero p{
+  margin-top:10px;
+  opacity:0.85;
+  animation:fadeUp 1.6s ease;
+}
+
+/* FLOATING CIRCLES */
+.circles{
+  position:absolute;
+  right:100px;
+  top:160px;
+  width:200px;
+  height:300px;
+}
+
+.circle{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  overflow:hidden;
+  border:3px solid rgba(255,255,255,0.5);
+  position:absolute;
+  animation:float 6s infinite ease-in-out;
+}
+
+.circle img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* POSITION EACH */
+.circle:nth-child(1){ top:0; right:0; animation-delay:0s;}
+.circle:nth-child(2){ top:100px; right:60px; animation-delay:1s;}
+.circle:nth-child(3){ top:200px; right:0; animation-delay:2s;}
+
+/* SEARCH BAR */
+.search{
+  position:absolute;
+  bottom:150px;
+  left:50%;
+  transform:translateX(-50%);
+  width:80%;
+  background:rgba(255,255,255,0.95);
+  border-radius:50px;
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 15px 40px rgba(0,0,0,0.3);
+  animation:fadeUp 1.8s ease;
+}
+
+.search div{
+  flex:1;
+  text-align:center;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.search div:hover{
+  color:#ff7a50;
+}
+
+.search button{
+  width:50px;
+  height:50px;
+  border:none;
+  border-radius:50%;
+  background:#000;
+  color:#fff;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.search button:hover{
+  transform:scale(1.1);
+}
+
+/* CARDS */
+.cards{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:90%;
+  display:flex;
+  gap:20px;
+}
+
+.card{
+  flex:1;
+  height:130px;
+  border-radius:15px;
+  overflow:hidden;
+  position:relative;
+  cursor:pointer;
+  transition:.4s;
+}
+
+.card:hover{
+  transform:translateY(-10px) scale(1.05);
+}
+
+.card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.card span{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:white;
+  padding:5px 10px;
+  border-radius:20px;
+  font-size:12px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(30px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes fadeDown{
+  from{
+    opacity:0;
+    transform:translateY(-30px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes float{
+  0%,100%{ transform:translateY(0);}
+  50%{ transform:translateY(-20px);}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- NAV -->
+  <div class="navbar">
+    <h3>Bayt Travel</h3>
+    <ul>
+      <li>Visitors</li>
+      <li>Apartments</li>
+      <li>Where to go</li>
+      <li>Contact</li>
+    </ul>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>WELCOME TO QATAR</h1>
+    <p>Discover Qatar’s best places to stay and explore</p>
+  </div>
+
+  <!-- FLOATING IMAGES -->
+  <div class="circles">
+    <div class="circle"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"></div>
+    <div class="circle"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470"></div>
+    <div class="circle"><img src="https://images.unsplash.com/photo-1493558103817-58b2924bce98"></div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search">
+    <div>📍 Qatar</div>
+    <div>📅 Check in</div>
+    <div>📅 Check out</div>
+    <div>👤 Visitors</div>
+    <button>➜</button>
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards">
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2">
+      <span>$120 / night</span>
+    </div>
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511">
+      <span>$95 / night</span>
+    </div>
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb">
+      <span>$140 / night</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

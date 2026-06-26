@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>EduSmart Primary School</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0D1B3E;
+  --navy-mid:#1B2F5E;
+  --navy-soft:#2A4080;
+  --amber:#F59E0B;
+  --amber-dark:#D97706;
+  --amber-light:#FEF3C7;
+  --white:#fff;
+  --bg:#FAFBFF;
+  --bg-blue:#EEF4FF;
+  --text:#1E293B;
+  --muted:#64748B;
+  --border:#E2E8F0;
+  --border-soft:#F1F5F9;
+  --r:14px;
+  --r-sm:10px;
+  --shadow:0 4px 24px rgba(13,27,62,.07);
+  --shadow-md:0 8px 40px rgba(13,27,62,.13);
+  --shadow-lg:0 20px 60px rgba(13,27,62,.18);
+  --transition:all .35s cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--navy);padding:9px 0;font-size:12.5px;color:#94A3B8}
+.topbar-inner{max-width:1320px;margin:0 auto;padding:0 32px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.topbar-left{display:flex;gap:22px;flex-wrap:wrap}
+.topbar-left span{display:flex;align-items:center;gap:7px}
+.topbar-left svg{color:#F59E0B;flex-shrink:0}
+.topbar-right{display:flex;gap:8px}
+.topbar-right a{width:28px;height:28px;border-radius:6px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:#94A3B8;text-decoration:none;transition:var(--transition)}
+.topbar-right a:hover{background:var(--amber);color:#fff}
+
+/* ── NAVBAR ── */
+.navbar{background:rgba(255,255,255,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:999;transition:box-shadow .3s}
+.navbar.scrolled{box-shadow:0 2px 24px rgba(13,27,62,.1)}
+.nav-inner{max-width:1320px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}
+.logo-mark{width:42px;height:42px;background:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-mark svg{color:#F59E0B}
+.logo-name{font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy);line-height:1}
+.logo-sub{font-size:10.5px;color:var(--muted);font-weight:500;letter-spacing:.5px;text-transform:uppercase;margin-top:1px}
+
+.nav-menu{display:flex;align-items:center;gap:2px;list-style:none}
+.nav-menu a{display:flex;align-items:center;gap:4px;padding:8px 13px;text-decoration:none;font-size:13.5px;font-weight:600;color:var(--muted);border-radius:8px;transition:var(--transition);position:relative}
+.nav-menu a::after{content:'';position:absolute;bottom:4px;left:13px;right:13px;height:2px;background:var(--amber);border-radius:2px;transform:scaleX(0);transition:transform .25s ease}
+.nav-menu a:hover{color:var(--navy)}
+.nav-menu a:hover::after{transform:scaleX(1)}
+.nav-menu a.active{color:var(--navy)}
+.nav-menu a.active::after{transform:scaleX(1)}
+
+.nav-actions{display:flex;align-items:center;gap:10px}
+.btn-ghost{background:none;border:1.5px solid var(--border);color:var(--navy);border-radius:9px;padding:8px 16px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:var(--transition)}
+.btn-ghost:hover{border-color:var(--navy);background:var(--bg-blue)}
+.btn-solid{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:9px 18px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:var(--transition);display:flex;align-items:center;gap:7px}
+.btn-solid:hover{background:var(--navy-soft);box-shadow:0 4px 16px rgba(13,27,62,.25)}
+.btn-amber{background:var(--amber);color:#fff;border:none;border-radius:9px;padding:9px 18px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:var(--transition)}
+.btn-amber:hover{background:var(--amber-dark);box-shadow:0 4px 16px rgba(245,158,11,.35)}
+.nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px;color:var(--navy)}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(160deg,#EEF4FF 0%,#F8FAFE 55%,#FFF8E8 100%);min-height:88vh;display:flex;align-items:center;padding:80px 0 60px;overflow:hidden;position:relative}
+.hero::before{content:'';position:absolute;top:-120px;right:-80px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.08) 0%,transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-80px;left:-60px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(13,27,62,.05) 0%,transparent 70%);pointer-events:none}
+.hero-inner{max-width:1320px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:64px;position:relative;z-index:1}
+
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:50px;padding:6px 14px;font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:22px;box-shadow:var(--shadow);animation:fadeInDown .7s ease both}
+.hero-eyebrow-dot{width:8px;height:8px;background:var(--amber);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes drawLine{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes slideRight{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
+@keyframes countUp{from{opacity:0}to{opacity:1}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+.hero-h1{font-family:'DM Serif Display',serif;font-size:52px;line-height:1.12;color:var(--navy);margin-bottom:14px;animation:fadeInUp .8s .15s ease both}
+.hero-h1 em{font-style:italic;color:var(--amber);display:inline-block;position:relative}
+.hero-h1 em::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:var(--amber);border-radius:2px;transform-origin:left;animation:drawLine .9s .9s ease both}
+
+.hero-p{font-size:16px;line-height:1.75;color:var(--muted);max-width:480px;margin-bottom:34px;animation:fadeInUp .8s .3s ease both}
+.hero-btns{display:flex;gap:13px;flex-wrap:wrap;animation:fadeInUp .8s .45s ease both}
+.btn-hero-primary{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:14px 26px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:var(--transition);display:flex;align-items:center;gap:9px;text-decoration:none}
+.btn-hero-primary:hover{background:var(--navy-soft);transform:translateY(-2px);box-shadow:0 8px 24px rgba(13,27,62,.3)}
+.btn-hero-outline{background:#fff;color:var(--navy);border:1.5px solid var(--border);border-radius:10px;padding:13px 24px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:var(--transition);display:flex;align-items:center;gap:9px;text-decoration:none}
+.btn-hero-outline:hover{border-color:var(--navy);transform:translateY(-2px);box-shadow:var(--shadow)}
+
+.hero-badges{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px;animation:fadeInUp .8s .6s ease both}
+.hero-badge-item{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--navy);box-shadow:var(--shadow)}
+.badge-icon{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.bi-blue{background:#DBEAFE} .bi-green{background:#DCFCE7} .bi-amber{background:#FEF3C7} .bi-purple{background:#F3E8FF}
+
+/* Hero image side */
+.hero-visual{position:relative;animation:fadeIn 1s .3s ease both;display:flex;align-items:center;justify-content:center}
+.hero-img-frame{width:480px;height:480px;position:relative;margin:0 auto}
+.hero-img-bg{position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,#D1E0FF 0%,#E8F4E8 100%);animation:floatY 5s ease-in-out infinite}
+.hero-img-inner{position:absolute;inset:24px;border-radius:50%;background:linear-gradient(135deg,#BFDBFE 0%,#C7D2FE 100%);display:flex;align-items:center;justify-content:center;font-size:10px;overflow:hidden;border:4px solid rgba(255,255,255,.8);box-shadow:var(--shadow-md)}
+.hero-photo-placeholder{width:100%;height:100%;background:linear-gradient(145deg,#B9D0F7 0%,#A8C4F0 50%,#C5DAF9 100%);display:flex;align-items:center;justify-content:center}
+
+.admissions-float{position:absolute;bottom:30px;right:-20px;background:var(--navy);border-radius:var(--r);padding:18px 20px;min-width:210px;box-shadow:var(--shadow-lg);animation:slideRight .8s .8s ease both}
+.adm-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.adm-icon{width:36px;height:36px;background:rgba(245,158,11,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.adm-icon svg{color:var(--amber)}
+.adm-title{font-size:13.5px;font-weight:700;color:#fff;line-height:1.3}
+.adm-badge{display:inline-block;background:var(--amber);color:#fff;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:20px;margin-top:4px}
+.adm-btn{width:100%;background:var(--amber);color:#fff;border:none;border-radius:8px;padding:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-top:10px;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:7px}
+.adm-btn:hover{background:var(--amber-dark)}
+
+.ratings-float{position:absolute;top:40px;left:-30px;background:#fff;border-radius:var(--r-sm);padding:14px 18px;box-shadow:var(--shadow-md);animation:slideRight .8s 1s ease both}
+.ratings-float .stars{display:flex;gap:3px;margin-bottom:5px}
+.ratings-float .stars svg{color:#F59E0B}
+.ratings-float span{font-size:12.5px;font-weight:700;color:var(--navy)}
+.ratings-float small{display:block;color:var(--muted);font-size:11.5px}
+
+/* ── STATS BAR ── */
+.stats-bar{background:var(--navy);padding:0}
+.stats-inner{max-width:1320px;margin:0 auto;padding:0 32px;display:flex}
+.stat-cell{flex:1;padding:28px 24px;display:flex;align-items:center;gap:16px;border-right:1px solid rgba(255,255,255,.08);transition:background .3s}
+.stat-cell:last-child{border-right:none}
+.stat-cell:hover{background:rgba(255,255,255,.04)}
+.stat-ico{width:44px;height:44px;border-radius:10px;background:rgba(245,158,11,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-ico svg{color:var(--amber)}
+.stat-num{font-family:'DM Serif Display',serif;font-size:28px;color:#fff;line-height:1}
+.stat-lbl{font-size:12px;color:#64748B;margin-top:3px;font-weight:500}
+
+/* ── SHARED SECTION STYLES ── */
+.section{padding:96px 0}
+.s-inner{max-width:1320px;margin:0 auto;padding:0 32px}
+.s-head{margin-bottom:52px}
+.s-top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:48px}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--amber);margin-bottom:12px}
+.eyebrow::before{content:'';width:20px;height:2px;background:var(--amber);border-radius:2px}
+.s-head h2{font-family:'DM Serif Display',serif;font-size:38px;line-height:1.18;color:var(--navy);margin-bottom:10px}
+.s-head p{font-size:15.5px;color:var(--muted);max-width:520px;line-height:1.65}
+.link-arrow{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:var(--navy);text-decoration:none;border-bottom:1.5px solid var(--border);padding-bottom:2px;transition:var(--transition)}
+.link-arrow:hover{color:var(--amber);border-color:var(--amber)}
+.link-arrow svg{transition:transform .25s}
+.link-arrow:hover svg{transform:translateX(4px)}
+
+/* ── REVEAL ANIMATION ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.4,0,.2,1)}
+.reveal.revealed{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+
+/* ── CLASSES ── */
+.classes-bg{background:var(--white)}
+.classes-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.class-card{border-radius:var(--r);padding:28px 24px 24px;border:1.5px solid var(--border);cursor:pointer;transition:var(--transition);position:relative;overflow:hidden;background:#fff}
+.class-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--amber));transform:scaleX(0);transform-origin:left;transition:transform .35s ease}
+.class-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md);border-color:transparent}
+.class-card:hover::before{transform:scaleX(1)}
+.card-tag{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;padding:4px 10px;border-radius:20px;display:inline-block;width:fit-content}
+.class-card h3{font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy);margin-bottom:4px}
+.card-age{font-size:12.5px;color:var(--muted);font-weight:500;margin-bottom:12px;display:flex;align-items:center;gap:5px}
+.class-card p{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:20px}
+.card-cta{display:flex;align-items:center;justify-content:space-between}
+.card-cta-link{font-size:13px;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:5px;transition:gap .2s}
+.card-cta-link:hover{gap:8px}
+.card-arrow-btn{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:var(--transition)}
+.card-arrow-btn:hover{transform:scale(1.1)}
+
+.cc-indigo{--card-accent:#4F46E5} .cc-indigo .card-tag{background:#EEF2FF;color:#4F46E5} .cc-indigo .card-cta-link{color:#4F46E5} .cc-indigo .card-arrow-btn{background:#EEF2FF;color:#4F46E5} .cc-indigo .card-arrow-btn:hover{background:#4F46E5;color:#fff}
+.cc-emerald{--card-accent:#059669} .cc-emerald .card-tag{background:#ECFDF5;color:#059669} .cc-emerald .card-cta-link{color:#059669} .cc-emerald .card-arrow-btn{background:#ECFDF5;color:#059669} .cc-emerald .card-arrow-btn:hover{background:#059669;color:#fff}
+.cc-orange{--card-accent:#EA580C} .cc-orange .card-tag{background:#FFF7ED;color:#EA580C} .cc-orange .card-cta-link{color:#EA580C} .cc-orange .card-arrow-btn{background:#FFF7ED;color:#EA580C} .cc-orange .card-arrow-btn:hover{background:#EA580C;color:#fff}
+.cc-violet{--card-accent:#7C3AED} .cc-violet .card-tag{background:#F5F3FF;color:#7C3AED} .cc-violet .card-cta-link{color:#7C3AED} .cc-violet .card-arrow-btn{background:#F5F3FF;color:#7C3AED} .cc-violet .card-arrow-btn:hover{background:#7C3AED;color:#fff}
+
+/* ── PARENTS SAY ── */
+.parents-bg{background:var(--bg-blue)}
+.testimonials-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.t-card{background:#fff;border-radius:var(--r);padding:30px;box-shadow:var(--shadow);transition:var(--transition);border:1px solid transparent}
+.t-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--border)}
+.t-quote-mark{display:block;margin-bottom:16px}
+.t-card p{font-size:14.5px;line-height:1.75;color:var(--text);margin-bottom:22px;font-style:italic}
+.t-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.t-author{display:flex;align-items:center;gap:12px}
+.t-avatar{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:18px;color:#fff;flex-shrink:0;font-weight:400}
+.av-a{background:linear-gradient(135deg,#4F46E5,#818CF8)}
+.av-b{background:linear-gradient(135deg,#059669,#34D399)}
+.av-c{background:linear-gradient(135deg,#D97706,#FCD34D)}
+.av-d{background:linear-gradient(135deg,#7C3AED,#A78BFA)}
+.t-name{font-size:14px;font-weight:700;color:var(--navy)}
+.t-role{font-size:12px;color:var(--muted);margin-top:1px}
+.t-stars{display:flex;gap:2px}
+.t-stars svg{color:var(--amber)}
+
+/* ── WHY EDUSMART ── */
+.why-bg{background:#fff}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.why-visual-box{background:linear-gradient(145deg,var(--bg-blue) 0%,#F0FDF4 100%);border-radius:20px;padding:52px 40px;position:relative;overflow:hidden}
+.why-visual-box::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;background:radial-gradient(circle,rgba(245,158,11,.12) 0%,transparent 70%);border-radius:50%}
+.why-school-icon{margin-bottom:28px}
+.why-school-icon svg{width:64px;height:64px;color:var(--navy)}
+.why-visual-box h3{font-family:'DM Serif Display',serif;font-size:26px;color:var(--navy);margin-bottom:10px}
+.why-visual-box p{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:28px}
+.why-badges{display:flex;flex-wrap:wrap;gap:10px}
+.why-badge{display:flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 13px;font-size:13px;font-weight:600;color:var(--navy);box-shadow:var(--shadow)}
+.why-badge svg{color:var(--amber)}
+
+.why-list{display:flex;flex-direction:column;gap:26px}
+.why-item{display:flex;gap:18px;padding:22px;border-radius:var(--r);border:1.5px solid var(--border);transition:var(--transition);background:#fff}
+.why-item:hover{border-color:transparent;box-shadow:var(--shadow-md);transform:translateX(4px)}
+.why-ico-wrap{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wi-blue{background:#DBEAFE} .wi-blue svg{color:#2563EB}
+.wi-green{background:#DCFCE7} .wi-green svg{color:#16A34A}
+.wi-amber{background:#FEF3C7} .wi-amber svg{color:#D97706}
+.wi-purple{background:#EDE9FE} .wi-purple svg{color:#7C3AED}
+.why-text h4{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:5px}
+.why-text p{font-size:13.5px;color:var(--muted);line-height:1.6}
+.btn-learn{display:inline-flex;align-items:center;gap:9px;background:var(--navy);color:#fff;border:none;border-radius:10px;padding:14px 24px;font-size:14.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-top:12px;transition:var(--transition);text-decoration:none}
+.btn-learn:hover{background:var(--navy-soft);transform:translateY(-2px);box-shadow:0 8px 24px rgba(13,27,62,.28)}
+
+/* ── ACTIVITIES ── */
+.activities-bg{background:var(--bg-blue)}
+.activities-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.act-card{border-radius:var(--r);overflow:hidden;background:#fff;box-shadow:var(--shadow);transition:var(--transition);cursor:pointer}
+.act-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md)}
+.act-img{height:160px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.act-img-inner{width:60px;height:60px;border-radius:14px;background:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.1);transition:transform .3s}
+.act-card:hover .act-img-inner{transform:scale(1.08)}
+.act-sports{background:linear-gradient(135deg,#BFDBFE 0%,#93C5FD 100%)}
+.act-arts{background:linear-gradient(135deg,#FBCFE8 0%,#F9A8D4 100%)}
+.act-stem{background:linear-gradient(135deg,#A7F3D0 0%,#6EE7B7 100%)}
+.act-community{background:linear-gradient(135deg,#FDE68A 0%,#FCD34D 100%)}
+.act-sports svg{color:#2563EB} .act-arts svg{color:#BE185D} .act-stem svg{color:#059669} .act-community svg{color:#D97706}
+.act-body{padding:16px 18px}
+.act-body h4{font-size:14.5px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.act-body p{font-size:12.5px;color:var(--muted);line-height:1.5}
+
+/* ── EVENTS ── */
+.events-bg{background:#fff}
+.events-list{max-width:680px;display:flex;flex-direction:column;gap:0}
+.event-item{display:flex;gap:20px;align-items:flex-start;padding:22px 0;border-bottom:1px solid var(--border-soft);transition:background .2s;cursor:pointer}
+.event-item:last-child{border-bottom:none}
+.event-item:hover .event-info h4{color:var(--amber)}
+.event-date{min-width:58px;background:var(--navy);border-radius:10px;padding:10px 6px;text-align:center;color:#fff;flex-shrink:0}
+.event-date .ev-month{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--amber);font-weight:700}
+.event-date .ev-day{font-family:'DM Serif Display',serif;font-size:26px;line-height:1.1}
+.event-info{padding-top:2px}
+.event-info h4{font-size:14.5px;font-weight:700;color:var(--navy);margin-bottom:5px;transition:color .2s}
+.event-info p{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:6px}
+.ev-read{display:inline-flex;align-items:center;gap:5px;color:var(--amber);font-size:12.5px;font-weight:600;text-decoration:none}
+.ev-read svg{transition:transform .2s} .ev-read:hover svg{transform:translateX(3px)}
+
+/* ── CTA BANNER ── */
+.cta-section{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-soft) 100%);padding:72px 0;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;top:-100px;right:10%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.12) 0%,transparent 70%);pointer-events:none}
+.cta-inner{max-width:1320px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:32px;position:relative;z-index:1}
+.cta-text h2{font-family:'DM Serif Display',serif;font-size:36px;color:#fff;margin-bottom:10px}
+.cta-text p{font-size:16px;color:#94A3B8}
+.cta-actions{display:flex;gap:14px;flex-wrap:wrap}
+.btn-cta-amber{background:var(--amber);color:#fff;border:none;border-radius:10px;padding:14px 26px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:var(--transition);display:flex;align-items:center;gap:9px}
+.btn-cta-amber:hover{background:var(--amber-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,158,11,.4)}
+.btn-cta-ghost{background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.2);border-radius:10px;padding:13px 24px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:var(--transition);display:flex;align-items:center;gap:9px}
+.btn-cta-ghost:hover{background:rgba(255,255,255,.15);transform:translateY(-2px)}
+
+/* ── FOOTER ── */
+footer{background:#070F24;color:#64748B;padding:64px 0 0}
+.footer-grid{max-width:1320px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:2fr 1fr 1.1fr 1.1fr 1.5fr;gap:48px}
+.footer-brand p{font-size:13.5px;line-height:1.7;color:#475569;margin:16px 0 24px}
+.footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.footer-logo-mark{width:38px;height:38px;background:rgba(255,255,255,.07);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.footer-logo-mark svg{color:var(--amber)}
+.f-brand-name{font-family:'DM Serif Display',serif;font-size:18px;color:#E2E8F0}
+.f-brand-sub{font-size:10.5px;color:#475569;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.social-row{display:flex;gap:8px}
+.social-row a{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;color:#64748B;text-decoration:none;transition:var(--transition)}
+.social-row a:hover{background:var(--amber);color:#fff}
+.footer-col h5{font-size:13px;font-weight:700;color:#CBD5E1;margin-bottom:18px;text-transform:uppercase;letter-spacing:.8px}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-col ul a{color:#475569;text-decoration:none;font-size:13.5px;transition:color .2s}
+.footer-col ul a:hover{color:var(--amber)}
+.f-contact{display:flex;flex-direction:column;gap:13px}
+.f-contact-row{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#475569}
+.f-contact-row svg{color:var(--amber);flex-shrink:0;margin-top:1px}
+.footer-bottom{max-width:1320px;margin:52px auto 0;padding:20px 32px;border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-bottom p{font-size:13px;color:#334155}
+.footer-bottom-links{display:flex;gap:20px}
+.footer-bottom-links a{font-size:13px;color:#334155;text-decoration:none;transition:color .2s}
+.footer-bottom-links a:hover{color:var(--amber)}
+
+/* ── MOBILE DRAWER ── */
+.mobile-overlay{display:none;position:fixed;inset:0;background:rgba(7,15,36,.6);z-index:1998;backdrop-filter:blur(4px);opacity:0;transition:opacity .3s}
+.mobile-overlay.open{display:block;opacity:1}
+.mobile-drawer{position:fixed;top:0;right:-320px;width:300px;height:100%;background:#fff;z-index:1999;padding:28px 24px;overflow-y:auto;box-shadow:var(--shadow-lg);transition:right .35s cubic-bezier(.4,0,.2,1)}
+.mobile-drawer.open{right:0}
+.mobile-drawer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+.mobile-close{background:none;border:1px solid var(--border);border-radius:8px;padding:7px;cursor:pointer;color:var(--navy);display:flex}
+.mobile-nav-list{list-style:none;display:flex;flex-direction:column;gap:2px}
+.mobile-nav-list a{display:block;padding:11px 12px;text-decoration:none;color:var(--text);font-weight:600;font-size:15px;border-radius:8px;transition:background .2s}
+.mobile-nav-list a:hover{background:var(--bg-blue);color:var(--navy)}
+.mobile-actions{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+.mobile-actions button{width:100%;padding:12px;border-radius:10px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;border:none}
+
+/* ── PROGRESS BAR ── */
+.scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--amber),#FCD34D);z-index:9999;width:0%;transition:width .1s linear}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .classes-grid{grid-template-columns:repeat(2,1fr)}
+  .activities-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:900px){
+  .why-grid{grid-template-columns:1fr}
+  .why-visual-box{display:none}
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .hero-h1{font-size:38px}
+  .hero-p{margin:0 auto 32px}
+  .hero-btns{justify-content:center}
+  .hero-badges{justify-content:center}
+  .hero-visual{order:-1}
+  .hero-img-frame{width:320px;height:320px}
+  .admissions-float{right:0;bottom:10px}
+  .ratings-float{left:0;top:10px}
+  .stat-cell{padding:20px 16px}
+  .stat-num{font-size:22px}
+}
+@media(max-width:768px){
+  .topbar{display:none}
+  .nav-menu{display:none}
+  .nav-actions .btn-ghost,.nav-actions .btn-amber{display:none}
+  .nav-toggle{display:flex}
+  .hero{padding:60px 0 48px;min-height:auto}
+  .hero-h1{font-size:32px}
+  .section{padding:64px 0}
+  .s-head h2{font-size:28px}
+  .classes-grid{grid-template-columns:1fr}
+  .testimonials-grid{grid-template-columns:1fr}
+  .activities-grid{grid-template-columns:repeat(2,1fr)}
+  .s-top{flex-direction:column;align-items:flex-start;gap:10px}
+  .cta-inner{flex-direction:column;text-align:center}
+  .cta-text h2{font-size:28px}
+  .cta-actions{justify-content:center}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;text-align:center}
+  .stats-inner{flex-wrap:wrap}
+  .stat-cell{min-width:45%;border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}
+}
+@media(max-width:480px){
+  .hero-h1{font-size:27px}
+  .activities-grid{grid-template-columns:1fr}
+  .hero-img-frame{width:260px;height:260px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+
+<!-- Scroll progress bar -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-left">
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        123 Education Street, Smart City
+      </span>
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        info@edusmart.edu
+      </span>
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        +1 (555) 123-4567
+      </span>
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Mon – Fri: 7:30 AM – 4:00 PM
+      </span>
+    </div>
+    <div class="topbar-right">
+      <a href="#" aria-label="Facebook">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+      <a href="#" aria-label="Twitter/X">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M4 20L20 4"/></svg>
+      </a>
+      <a href="#" aria-label="Instagram">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="#" aria-label="YouTube">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <div>
+        <div class="logo-name">EduSmart</div>
+        <div class="logo-sub">Primary School</div>
+      </div>
+    </a>
+    <ul class="nav-menu">
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Academics
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </a></li>
+      <li><a href="#">Admissions</a></li>
+      <li><a href="#">Activities
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </a></li>
+      <li><a href="#">Gallery</a></li>
+      <li><a href="#">News</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-ghost">Parent Login</button>
+      <button class="btn-amber">Apply Now</button>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-overlay" id="mobileOverlay" onclick="closeDrawer()"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-head">
+    <a href="#" class="logo">
+      <div class="logo-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+      <div class="logo-name" style="font-size:17px">EduSmart</div>
+    </a>
+    <button class="mobile-close" onclick="closeDrawer()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <ul class="mobile-nav-list">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">About Us</a></li>
+    <li><a href="#">Academics</a></li>
+    <li><a href="#">Admissions</a></li>
+    <li><a href="#">Activities</a></li>
+    <li><a href="#">Gallery</a></li>
+    <li><a href="#">News</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="mobile-actions">
+    <button style="background:var(--bg-blue);color:var(--navy)">Parent Login</button>
+    <button style="background:var(--amber);color:#fff">Apply Now</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        Admissions Open · 2025–2026
+      </div>
+      <h1 class="hero-h1">Inspiring Young Minds,<br><em>Shaping Bright Futures</em></h1>
+      <p class="hero-p">At EduSmart Primary School, we nurture curiosity, creativity and character to help every child grow, learn and succeed in a safe and joyful environment.</p>
+      <div class="hero-btns">
+        <a href="#" class="btn-hero-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          Discover Our School
+        </a>
+        <a href="#" class="btn-hero-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Schedule a Tour
+        </a>
+      </div>
+      <div class="hero-badges">
+        <div class="hero-badge-item">
+          <div class="badge-icon bi-blue">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          Modern Classrooms
+        </div>
+        <div class="hero-badge-item">
+          <div class="badge-icon bi-green">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          Qualified Teachers
+        </div>
+        <div class="hero-badge-item">
+          <div class="badge-icon bi-amber">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          Safe &amp; Secure Campus
+        </div>
+        <div class="hero-badge-item">
+          <div class="badge-icon bi-purple">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          Holistic Development
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-img-frame">
+        <div class="hero-img-bg"></div>
+        <div class="hero-img-inner">
+         <div class="hero-photo-placeholder">
+  <img src="/public/ed.png" alt="Kids at EduSmart" style="width:100%; height:100%; object-fit:cover; display:block;" />
+</div>
+        </div>
+        <div class="admissions-float">
+          <div class="adm-top">
+            <div class="adm-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div>
+              <div class="adm-title">Admissions Open<br>2025 – 2026</div>
+              <span class="adm-badge">Limited Seats</span>
+            </div>
+          </div>
+          <button class="adm-btn">
+            Apply Now
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+        <div class="ratings-float">
+          <div class="stars">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <span>4.9 / 5 Rating</span>
+          <small>Based on 200+ parent reviews</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-cell reveal">
+      <div class="stat-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
+      <div><div class="stat-num" data-target="18">0</div><div class="stat-lbl">Years of Excellence</div></div>
+    </div>
+    <div class="stat-cell reveal reveal-delay-1">
+      <div class="stat-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div><div class="stat-num" data-target="620">0</div><div class="stat-lbl">Happy Students</div></div>
+    </div>
+    <div class="stat-cell reveal reveal-delay-2">
+      <div class="stat-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+      <div><div class="stat-num" data-target="48">0</div><div class="stat-lbl">Certified Teachers</div></div>
+    </div>
+    <div class="stat-cell reveal reveal-delay-3">
+      <div class="stat-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+      <div><div class="stat-num">12:1</div><div class="stat-lbl">Student–Teacher Ratio</div></div>
+    </div>
+    <div class="stat-cell reveal reveal-delay-4">
+      <div class="stat-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+      <div><div class="stat-num" data-target="98">0</div><div class="stat-lbl">% Parent Satisfaction</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPLORE CLASSES -->
+<section class="section classes-bg">
+  <div class="s-inner">
+    <div class="s-top">
+      <div class="reveal">
+        <div class="eyebrow">Our Programs</div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:38px;color:var(--navy);margin-bottom:8px">Explore Our Classes</h2>
+        <p style="color:var(--muted);font-size:15.5px">A nurturing journey for every age and stage of learning.</p>
+      </div>
+      <a href="#" class="link-arrow reveal">View All Classes <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+    <div class="classes-grid">
+      <div class="class-card cc-indigo reveal">
+        <span class="card-tag">Kindergarten</span>
+        <h3>Kindergarten</h3>
+        <div class="card-age"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Ages 3 – 5</div>
+        <p>Play, explore and learn through fun activities designed to spark curiosity and build confidence.</p>
+        <div class="card-cta">
+          <a href="#" class="card-cta-link">Learn more <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+          <button class="card-arrow-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        </div>
+      </div>
+      <div class="class-card cc-emerald reveal reveal-delay-1">
+        <span class="card-tag">Primary 1–2</span>
+        <h3>Primary 1 – 2</h3>
+        <div class="card-age"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Ages 6 – 7</div>
+        <p>Building strong foundations in literacy, numeracy and core life skills through structured play.</p>
+        <div class="card-cta">
+          <a href="#" class="card-cta-link">Learn more <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+          <button class="card-arrow-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        </div>
+      </div>
+      <div class="class-card cc-orange reveal reveal-delay-2">
+        <span class="card-tag">Primary 3–4</span>
+        <h3>Primary 3 – 4</h3>
+        <div class="card-age"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Ages 8 – 9</div>
+        <p>Encouraging curiosity, critical thinking and independent learning across all disciplines.</p>
+        <div class="card-cta">
+          <a href="#" class="card-cta-link">Learn more <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+          <button class="card-arrow-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        </div>
+      </div>
+      <div class="class-card cc-violet reveal reveal-delay-3">
+        <span class="card-tag">Primary 5–6</span>
+        <h3>Primary 5 – 6</h3>
+        <div class="card-age"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Ages 10 – 12</div>
+        <p>Preparing students for secondary school with rigorous academics and leadership opportunities.</p>
+        <div class="card-cta">
+          <a href="#" class="card-cta-link">Learn more <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+          <button class="card-arrow-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT PARENTS SAY -->
+<section class="section parents-bg">
+  <div class="s-inner">
+    <div class="s-top">
+      <div class="reveal">
+        <div class="eyebrow">Testimonials</div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:38px;color:var(--navy);margin-bottom:8px">What Parents Say</h2>
+        <p style="color:var(--muted);font-size:15.5px">Hear from families who've trusted EduSmart with their children's futures.</p>
+      </div>
+      <a href="#" class="link-arrow reveal">View All Reviews <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+    <div class="testimonials-grid">
+      <div class="t-card reveal">
+        <svg class="t-quote-mark" width="32" height="32" viewBox="0 0 24 24" fill="#F59E0B" opacity="0.35"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+        <p>EduSmart has been a wonderful experience for our daughter. The teachers are genuinely passionate and the environment is perfectly designed for learning. We couldn't be happier.</p>
+        <div class="t-footer">
+          <div class="t-author">
+            <div class="t-avatar av-a">S</div>
+            <div><div class="t-name">Sarah Johnson</div><div class="t-role">Parent of Year 3 student</div></div>
+          </div>
+          <div class="t-stars">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="t-card reveal reveal-delay-1">
+        <svg class="t-quote-mark" width="32" height="32" viewBox="0 0 24 24" fill="#F59E0B" opacity="0.35"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+        <p>We've seen tremendous growth in our son — not just academically, but in confidence and social skills too. The staff truly invest in each child's individual journey.</p>
+        <div class="t-footer">
+          <div class="t-author">
+            <div class="t-avatar av-b">M</div>
+            <div><div class="t-name">Michael Brown</div><div class="t-role">Parent of Year 5 student</div></div>
+          </div>
+          <div class="t-stars">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="t-card reveal reveal-delay-2">
+        <svg class="t-quote-mark" width="32" height="32" viewBox="0 0 24 24" fill="#F59E0B" opacity="0.35"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+        <p>The school balances academics, wellbeing and activities so well. My daughter looks forward to school every single day — that says everything you need to know.</p>
+        <div class="t-footer">
+          <div class="t-author">
+            <div class="t-avatar av-c">A</div>
+            <div><div class="t-name">Amanda Lee</div><div class="t-role">Parent of Year 2 student</div></div>
+          </div>
+          <div class="t-stars">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="t-card reveal reveal-delay-3">
+        <svg class="t-quote-mark" width="32" height="32" viewBox="0 0 24 24" fill="#F59E0B" opacity="0.35"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+        <p>EduSmart is a caring community where kids feel genuinely safe and inspired. The STEM programs are exceptional and have completely changed how my son approaches problems.</p>
+        <div class="t-footer">
+          <div class="t-author">
+            <div class="t-avatar av-d">R</div>
+            <div><div class="t-name">Robert Davis</div><div class="t-role">Parent of Year 6 student</div></div>
+          </div>
+          <div class="t-stars">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY EDUSMART -->
+<section class="section why-bg">
+  <div class="s-inner">
+    <div class="why-grid">
+      <div class="why-visual-box reveal">
+        <div class="why-school-icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <h3>A school built on trust, care and excellence</h3>
+        <p>For over 18 years, EduSmart has been the first choice of families who want more than academic results — they want a school that raises confident, curious, kind human beings.</p>
+        <div class="why-badges">
+          <div class="why-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg> Award Winning</div>
+          <div class="why-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> ISO Certified</div>
+          <div class="why-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12M2 7l10-5 10 5"/><path d="M7 9.5v5"/><path d="M17 9.5v5"/></svg> Eco Campus</div>
+        </div>
+      </div>
+      <div>
+        <div class="reveal">
+          <div class="eyebrow">Our Advantage</div>
+          <h2 style="font-family:'DM Serif Display',serif;font-size:38px;color:var(--navy);margin-bottom:10px">Why Choose EduSmart?</h2>
+          <p style="color:var(--muted);font-size:15.5px;margin-bottom:32px">We believe every child deserves the very best start in life.</p>
+        </div>
+        <div class="why-list">
+          <div class="why-item reveal">
+            <div class="why-ico-wrap wi-blue">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <div class="why-text">
+              <h4>Academic Excellence</h4>
+              <p>Well-structured curriculum aligned with international standards and rigorous best practices.</p>
+            </div>
+          </div>
+          <div class="why-item reveal reveal-delay-1">
+            <div class="why-ico-wrap wi-green">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="why-text">
+              <h4>Experienced Faculty</h4>
+              <p>Passionate and dedicated educators committed to every child's growth and long-term success.</p>
+            </div>
+          </div>
+          <div class="why-item reveal reveal-delay-2">
+            <div class="why-ico-wrap wi-amber">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="why-text">
+              <h4>Safe &amp; Secure Environment</h4>
+              <p>24/7 security, CCTV monitoring and a fully child-safe infrastructure on every inch of campus.</p>
+            </div>
+          </div>
+          <div class="why-item reveal reveal-delay-3">
+            <div class="why-ico-wrap wi-purple">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <div class="why-text">
+              <h4>Holistic Development</h4>
+              <p>A rich blend of academics, sport, arts and values education for truly well-rounded growth.</p>
+            </div>
+          </div>
+        </div>
+        <a href="#" class="btn-learn reveal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          Learn More About Us
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACTIVITIES -->
+<section class="section activities-bg">
+  <div class="s-inner">
+    <div class="s-top">
+      <div class="reveal">
+        <div class="eyebrow">Beyond the Classroom</div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:38px;color:var(--navy);margin-bottom:8px">Activities &amp; Programs</h2>
+        <p style="color:var(--muted);font-size:15.5px">Enriching experiences that develop the whole child.</p>
+      </div>
+      <a href="#" class="link-arrow reveal">View All Activities <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+    <div class="activities-grid">
+      <div class="act-card reveal">
+        <div class="act-img act-sports">
+          <div class="act-img-inner act-sports">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l4.24 4.24"/><path d="M14.83 9.17l4.24-4.24"/><path d="M14.83 14.83l4.24 4.24"/><path d="M9.17 14.83l-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg>
+          </div>
+        </div>
+        <div class="act-body">
+          <h4>Sports &amp; Athletics</h4>
+          <p>Football, swimming, athletics and team sports to build fitness, discipline and sportsmanship.</p>
+        </div>
+      </div>
+      <div class="act-card reveal reveal-delay-1">
+        <div class="act-img act-arts">
+          <div class="act-img-inner act-arts">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+          </div>
+        </div>
+        <div class="act-body">
+          <h4>Music &amp; Arts</h4>
+          <p>Painting, sculpture, performance and musical instruments to nurture creativity and self-expression.</p>
+        </div>
+      </div>
+      <div class="act-card reveal reveal-delay-2">
+        <div class="act-img act-stem">
+          <div class="act-img-inner act-stem">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+          </div>
+        </div>
+        <div class="act-body">
+          <h4>STEM Club</h4>
+          <p>Robotics, coding and science experiments designed to ignite curiosity and future-ready thinking.</p>
+        </div>
+      </div>
+      <div class="act-card reveal reveal-delay-3">
+        <div class="act-img act-community">
+          <div class="act-img-inner act-community">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+        </div>
+        <div class="act-body">
+          <h4>Community Service</h4>
+          <p>Volunteering and service programmes that develop empathy, civic responsibility and leadership.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UPCOMING EVENTS -->
+<section class="section events-bg">
+  <div class="s-inner">
+    <div class="s-top">
+      <div class="reveal">
+        <div class="eyebrow">School Calendar</div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:38px;color:var(--navy);margin-bottom:8px">Upcoming Events</h2>
+        <p style="color:var(--muted);font-size:15.5px">Stay up to date with the latest school happenings.</p>
+      </div>
+      <a href="#" class="link-arrow reveal">View All News <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+    <div class="events-list">
+      <div class="event-item reveal">
+        <div class="event-date"><div class="ev-month">MAY</div><div class="ev-day">29</div></div>
+        <div class="event-info">
+          <h4>Annual Sports Day 2025</h4>
+          <p>A full day of energy, team spirit and unforgettable moments for the whole school community.</p>
+          <a href="#" class="ev-read">Read More <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+      </div>
+      <div class="event-item reveal reveal-delay-1">
+        <div class="event-date"><div class="ev-month">MAY</div><div class="ev-day">15</div></div>
+        <div class="event-info">
+          <h4>Science Fair — Winners Announced</h4>
+          <p>Congratulations to our young scientists for their remarkable projects and innovative thinking.</p>
+          <a href="#" class="ev-read">Read More <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+      </div>
+      <div class="event-item reveal reveal-delay-2">
+        <div class="event-date"><div class="ev-month">JUN</div><div class="ev-day">01</div></div>
+        <div class="event-info">
+          <h4>Summer Camp Begins</h4>
+          <p>Sunday 09:00 AM — An exciting programme of outdoor adventures and creative workshops awaits.</p>
+          <a href="#" class="ev-read">Read More <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+      </div>
+      <div class="event-item reveal reveal-delay-3">
+        <div class="event-date"><div class="ev-month">JUN</div><div class="ev-day">19</div></div>
+        <div class="event-info">
+          <h4>School Closed — Eid Al-Adha</h4>
+          <p>All classes and extracurricular activities will be suspended for the public holiday.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-text reveal">
+      <h2>Ready to Join the EduSmart Family?</h2>
+      <p>Take the first step towards a bright future for your child.</p>
+    </div>
+    <div class="cta-actions reveal reveal-delay-1">
+      <button class="btn-cta-amber">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Apply Now
+      </button>
+      <button class="btn-cta-ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Contact Us
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <div class="footer-logo-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <div>
+          <div class="f-brand-name">EduSmart</div>
+          <div class="f-brand-sub">Primary School</div>
+        </div>
+      </div>
+      <p>We are committed to nurturing young minds and building bright futures through quality education and holistic development.</p>
+      <div class="social-row">
+        <a href="#" aria-label="Facebook"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        <a href="#" aria-label="Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M4 20L20 4"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Academics</a></li>
+        <li><a href="#">Admissions</a></li>
+        <li><a href="#">Activities</a></li>
+        <li><a href="#">School News</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Programs</h5>
+      <ul>
+        <li><a href="#">Kindergarten</a></li>
+        <li><a href="#">Primary 1 – 2</a></li>
+        <li><a href="#">Primary 3 – 4</a></li>
+        <li><a href="#">Primary 5 – 6</a></li>
+        <li><a href="#">Clubs &amp; Activities</a></li>
+        <li><a href="#">Summer Program</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Parents</h5>
+      <ul>
+        <li><a href="#">Parent Login</a></li>
+        <li><a href="#">Student Portal</a></li>
+        <li><a href="#">Calendar</a></li>
+        <li><a href="#">Get Involved</a></li>
+        <li><a href="#">Parent Resources</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contact Us</h5>
+      <div class="f-contact">
+        <div class="f-contact-row">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>123 Education Street, Smart City, SC 12345</span>
+        </div>
+        <div class="f-contact-row">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span>+1 (555) 123-4567</span>
+        </div>
+        <div class="f-contact-row">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span>info@edusmart.edu</span>
+        </div>
+        <div class="f-contact-row">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Mon – Fri: 7:30 AM – 4:00 PM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 EduSmart Primary School. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Scroll progress bar
+const progressBar = document.getElementById('scrollProgress');
+window.addEventListener('scroll', () => {
+  const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+  progressBar.style.width = pct + '%';
+});
+
+// ── Navbar shadow on scroll
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 10);
+});
+
+// ── Mobile drawer
+function closeDrawer() {
+  document.getElementById('mobileDrawer').classList.remove('open');
+  document.getElementById('mobileOverlay').classList.remove('open');
+}
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('mobileDrawer').classList.add('open');
+  document.getElementById('mobileOverlay').classList.add('open');
+});
+
+// ── Scroll reveal
+const revealEls = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => revealObs.observe(el));
+
+// ── Counter animation
+function animateCounter(el) {
+  const target = parseInt(el.getAttribute('data-target'));
+  if (!target) return;
+  const suffix = el.textContent.replace(/\d/g,'').trim();
+  const dur = 1800, step = 16;
+  const inc = target / (dur / step);
+  let cur = 0;
+  const timer = setInterval(() => {
+    cur = Math.min(cur + inc, target);
+    el.textContent = Math.floor(cur) + (el.getAttribute('data-target') === '98' ? '' : '+');
+    if (cur >= target) { el.textContent = target + (el.getAttribute('data-target') === '98' ? '' : '+'); clearInterval(timer); }
+  }, step);
+}
+const statNums = document.querySelectorAll('.stat-num[data-target]');
+const statObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target); statObs.unobserve(e.target); } });
+}, { threshold: 0.5 });
+statNums.forEach(el => statObs.observe(el));
+</script>
+</body>
+</html>

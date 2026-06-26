@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pro:1️⃣ Teacher Dashboard | Three.js + GSAP</title>
-    <!-- Font Awesome 6 (professional kit) -->
+    <title>pro:1️⃣ Teacher Dashboard | Enhanced Three.js + GSAP</title>
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- GSAP & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -16,15 +16,20 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
         }
 
         body {
-            background: #0b121c;  /* deep navy base */
+            background: #0b121c;
             overflow-x: hidden;
+            transition: background-color 0.3s ease;
         }
 
-        /* ----- Three.js canvas (muted, elegant motion) ----- */
+        body.light-mode {
+            background: #f0f5fa;
+        }
+
+        /* ----- Three.js canvas ----- */
         #three-canvas {
             position: fixed;
             top: 0;
@@ -35,28 +40,159 @@
             pointer-events: none;
         }
 
-        /* ----- DASHBOARD LAYER (crisp, professional glass) ----- */
+        /* ----- LEFT NAVBAR (enhanced with glass) ----- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: rgba(18, 28, 40, 0.85);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(76, 130, 200, 0.25);
+            z-index: 20;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 30px rgba(0,0,0,0.4);
+            transition: background 0.3s ease;
+        }
+
+        .light-mode .navbar {
+            background: rgba(240, 248, 255, 0.85);
+            border-right: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .nav-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(76, 130, 200, 0.3);
+        }
+
+        .nav-header i {
+            font-size: 2.2rem;
+            color: #3b82f6;
+            filter: drop-shadow(0 0 8px rgba(59,130,246,0.5));
+        }
+
+        .nav-header h2 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            background: linear-gradient(150deg, #b3d9ff, #7ca9d9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .light-mode .nav-header h2 {
+            background: linear-gradient(150deg, #1e4a7a, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-items {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 1rem 1.2rem;
+            border-radius: 16px;
+            color: #c7e0ff;
+            transition: all 0.2s;
+            cursor: default;
+            border: 1px solid transparent;
+        }
+
+        .light-mode .nav-item {
+            color: #1e3a5f;
+        }
+
+        .nav-item i {
+            width: 24px;
+            font-size: 1.3rem;
+            color: #3b82f6;
+        }
+
+        .nav-item:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+        }
+
+        .mood-toggle {
+            margin-top: auto;
+            padding: 1.5rem 0 1rem;
+            border-top: 1px solid rgba(76, 130, 200, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toggle-btn {
+            background: rgba(18, 28, 40, 0.9);
+            border: 1px solid #3b82f6;
+            border-radius: 40px;
+            padding: 0.5rem 1rem;
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+            color: #c7e0ff;
+        }
+
+        .light-mode .toggle-btn {
+            background: rgba(240, 248, 255, 0.9);
+            color: #1e3a5f;
+        }
+
+        .toggle-btn i {
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+
+        /* ----- DASHBOARD (shifted) ----- */
         .dashboard {
             position: relative;
             z-index: 10;
             max-width: 1440px;
-            margin: 0 auto;
+            margin: 0 0 0 280px;
             padding: 2rem 2.8rem 6rem;
             color: #eef4ff;
             pointer-events: auto;
+            transition: color 0.3s ease;
         }
 
-        /* premium glass with less blur, more solid/light */
+        .light-mode .dashboard {
+            color: #1a2e3f;
+        }
+
+        /* premium glass */
         .premium-glass {
             background: rgba(18, 28, 40, 0.75);
             backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(66, 99, 135, 0.4);
+            border: 1px solid rgba(76, 130, 200, 0.4);
             box-shadow: 0 15px 35px -15px rgba(0,0,0,0.5);
             border-radius: 36px;
         }
 
-        /* header — elegant */
+        .light-mode .premium-glass {
+            background: rgba(255, 255, 255, 0.75);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        /* header */
         .header-pro {
             display: flex;
             align-items: center;
@@ -70,6 +206,11 @@
             box-shadow: 0 20px 35px -20px #000;
         }
 
+        .light-mode .header-pro {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
         .header-pro h1 {
             font-weight: 600;
             font-size: 2.1rem;
@@ -78,6 +219,13 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
+        .light-mode .header-pro h1 {
+            background: linear-gradient(150deg, #1e4a7a, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .badge-pro {
             background: rgba(26, 45, 65, 0.8);
             padding: 0.5rem 2rem;
@@ -89,7 +237,13 @@
             backdrop-filter: blur(4px);
         }
 
-        /* widget grid — professional metrics */
+        .light-mode .badge-pro {
+            background: rgba(255,255,240,0.8);
+            color: #1e3a5f;
+            border-color: #3b82f6;
+        }
+
+        /* widget grid */
         .grid-pro {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -105,11 +259,21 @@
             padding: 1.8rem 1.5rem;
             border: 1px solid rgba(76, 130, 200, 0.25);
             box-shadow: 0 8px 25px -10px #000;
-            transition: transform 0.15s;
+            transition: transform 0.2s;
         }
+
+        .light-mode .widget-pro {
+            background: rgba(255, 255, 255, 0.7);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
         .widget-pro i { font-size: 2rem; color: #7ca9d9; margin-bottom: 0.5rem; }
         .widget-pro h3 { font-size: 1.5rem; font-weight: 500; color: #e1efff; }
         .widget-pro p { color: #a3c2e0; font-weight: 400; }
+
+        .light-mode .widget-pro h3 { color: #1a3b5c; }
+        .light-mode .widget-pro p { color: #2c4b6e; }
+        .light-mode .widget-pro i { color: #2563eb; }
 
         /* sections */
         .section-pro {
@@ -122,6 +286,11 @@
             box-shadow: 0 30px 40px -30px #000;
         }
 
+        .light-mode .section-pro {
+            background: rgba(255, 255, 255, 0.6);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
         .section-title-pro {
             font-size: 2.2rem;
             font-weight: 500;
@@ -132,10 +301,12 @@
             border-left: 6px solid #3b82f6;
             padding-left: 2rem;
             color: #e1efff;
-            letter-spacing: -0.01em;
         }
 
-        /* card elegant */
+        .light-mode .section-title-pro {
+            color: #1a3b5c;
+        }
+
         .card-pro {
             background: rgba(26, 38, 52, 0.8);
             backdrop-filter: blur(6px);
@@ -143,7 +314,11 @@
             padding: 1.8rem 1.8rem;
             border: 1px solid rgba(76, 130, 200, 0.3);
             box-shadow: 0 15px 25px -18px #000;
-            transition: 0.2s;
+        }
+
+        .light-mode .card-pro {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(59, 130, 246, 0.2);
         }
 
         .stat-pill {
@@ -157,9 +332,20 @@
             color: #c7e0ff;
             font-size: 0.9rem;
         }
+
+        .light-mode .stat-pill {
+            background: rgba(240, 248, 255, 0.9);
+            color: #1e3a5f;
+            border-color: #3b82f6;
+        }
+
         .stat-pill.primary { background: #1a3a5a; color: #b3d9ff; border-color: #3b82f6; }
         .stat-pill.success { background: #1a3a3a; color: #8bcb8b; border-color: #2e7d5e; }
         .stat-pill.warning { background: #3a3a1a; color: #f5c542; border-color: #b68b40; }
+
+        .light-mode .stat-pill.primary { background: #dbeafe; color: #1e3a8a; }
+        .light-mode .stat-pill.success { background: #dcfce7; color: #166534; }
+        .light-mode .stat-pill.warning { background: #fef9c3; color: #854d0e; }
 
         .avatar-pro {
             width: 48px; height: 48px;
@@ -178,6 +364,11 @@
             border: 1px solid #2f5170;
         }
 
+        .light-mode .message-pro {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: #3b82f6;
+        }
+
         .doc-pro {
             background: rgba(18, 28, 40, 0.9);
             border-radius: 30px;
@@ -187,6 +378,12 @@
             border: 1px solid #2f5170;
             color: #c7e0ff;
             font-weight: 450;
+        }
+
+        .light-mode .doc-pro {
+            background: rgba(255, 255, 255, 0.9);
+            color: #1e3a5f;
+            border-color: #3b82f6;
         }
 
         button.pro-btn {
@@ -202,34 +399,69 @@
             backdrop-filter: blur(4px);
         }
 
+        .light-mode button.pro-btn {
+            background: rgba(255,255,255,0.9);
+            color: #1e3a5f;
+        }
+
         .footer-pro {
             margin-top: 5rem;
             text-align: center;
             color: #6b8cac;
             font-weight: 300;
-            letter-spacing: 0.3px;
         }
 
-        /* scrollbar refined */
+        .light-mode .footer-pro {
+            color: #4a6b8a;
+        }
+
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0b121c; }
         ::-webkit-scrollbar-thumb { background: #2f5170; border-radius: 20px; }
+        .light-mode ::-webkit-scrollbar-track { background: #e2eaf1; }
+        .light-mode ::-webkit-scrollbar-thumb { background: #3b82f6; }
     </style>
 </head>
-<body>
+<body class="dark-mode">
     <canvas id="three-canvas"></canvas>
 
+    <!-- LEFT NAVBAR -->
+    <div class="navbar">
+        <div class="nav-header">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <h2>TeachPro</h2>
+        </div>
+        <div class="nav-items">
+            <div class="nav-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</div>
+            <div class="nav-item"><i class="fas fa-book"></i> Classes</div>
+            <div class="nav-item"><i class="fas fa-user-graduate"></i> Students</div>
+            <div class="nav-item"><i class="fas fa-calendar-check"></i> Attendance</div>
+            <div class="nav-item"><i class="fas fa-star"></i> Grades</div>
+            <div class="nav-item"><i class="fas fa-envelope"></i> Messages</div>
+            <div class="nav-item"><i class="fas fa-folder"></i> Documents</div>
+            <div class="nav-item"><i class="fas fa-cog"></i> Settings</div>
+        </div>
+        <div class="mood-toggle">
+            <span style="color:#c7e0ff;"><i class="fas fa-adjust"></i> Mood</span>
+            <div class="toggle-btn" id="moodToggle">
+                <i class="fas fa-sun" id="sunIcon" style="opacity:0.5;"></i>
+                <i class="fas fa-moon" id="moonIcon" style="opacity:1;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
     <div class="dashboard">
-        <!-- header professional -->
+        <!-- header -->
         <div class="header-pro" id="headerPro">
             <div>
-                <h1><i class="fas fa-chalkboard" style="margin-right: 12px; color:#7ca9d9;"></i>1️⃣ Teacher Dashboard · Pro</h1>
-                <p style="color: #a3c2e0;"><i class="far fa-calendar-alt"></i> Tuesday, 14 Mar 2026 · Grade 2A homeroom</p>
+                <h1><i class="fas fa-chalkboard" style="margin-right: 12px;"></i>1️⃣ Teacher Dashboard · Pro</h1>
+                <p><i class="far fa-calendar-alt"></i> Tuesday, 14 Mar 2026 · Grade 2A homeroom</p>
             </div>
             <div class="badge-pro"><i class="fas fa-tasks" style="margin-right: 6px;"></i> 4 pending</div>
         </div>
 
-        <!-- main metrics widgets (professional) -->
+        <!-- main widgets -->
         <div class="grid-pro" id="widgetGridPro">
             <div class="widget-pro"><i class="fas fa-chalkboard-teacher"></i><h3>Today's classes</h3><p>Math 09:00 · 2A<br>Science 11:00 · 5B<br>French 13:00 · 2A</p></div>
             <div class="widget-pro"><i class="fas fa-user-check"></i><h3>Attendance</h3><p>Present 22 · Late 2<br>Absent 1 · ⌀ 94%</p></div>
@@ -237,9 +469,9 @@
             <div class="widget-pro"><i class="fas fa-clock"></i><h3>Pending</h3><p>5 essays · lesson plan<br>grades due Fri</p></div>
         </div>
 
-        <!-- 📚 My Classes (pro) -->
+        <!-- 📚 My Classes -->
         <section class="section-pro" id="classesPro">
-            <div class="section-title-pro"><i class="fas fa-book" style="color:#7ca9d9;"></i> 📚 My Classes · overview</div>
+            <div class="section-title-pro"><i class="fas fa-book"></i> 📚 My Classes · overview</div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
                 <div class="card-pro"><i class="fas fa-users" style="color:#7ca9d9;"></i> <h3>Grade 2A</h3> <p><span class="stat-pill">24 students</span> <span class="stat-pill">next: Math</span></p><hr style="border-color:#2f5170; margin:1rem 0;"><p>⏳ avg 87% · 2 IEP</p><i class="fas fa-arrow-right" style="color:#7ca9d9;"></i> details</div>
                 <div class="card-pro"><i class="fas fa-users" style="color:#7ca9d9;"></i> <h3>Grade 5B</h3> <p><span class="stat-pill">28 students</span> <span class="stat-pill">next: History</span></p><hr style="border-color:#2f5170; margin:1rem 0;"><p>⏳ avg 91% · project due</p><i class="fas fa-arrow-right" style="color:#7ca9d9;"></i> details</div>
@@ -247,19 +479,19 @@
             </div>
         </section>
 
-        <!-- 👨‍🎓 Students profiles (professional concise) -->
+        <!-- 👨‍🎓 Students profiles -->
         <section class="section-pro" id="studentsPro">
-            <div class="section-title-pro"><i class="fas fa-user-graduate" style="color:#7ca9d9;"></i> 👨‍🎓 Student performance</div>
+            <div class="section-title-pro"><i class="fas fa-user-graduate"></i> 👨‍🎓 Student performance</div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
-                <div class="card-pro"><div style="display:flex; gap:1rem; align-items:center;"><div class="avatar-pro"></div><div><h3>Emma Watson</h3><span style="color:#a3c2e0;">Age 8 · 2A</span></div></div><p><i class="fas fa-phone"></i> +216 55 123 456 · parent: Jane</p><p><span class="stat-pill primary">Math 18/20</span> <span class="stat-pill primary">French 19/20</span></p><p><span class="stat-pill success">attendance 95%</span> <span class="stat-pill warning">behavior: engaged</span></p><button class="pro-btn"><i class="fas fa-pen"></i> observation note</button></div>
-                <div class="card-pro"><div style="display:flex; gap:1rem;"><div class="avatar-pro"></div><div><h3>Liam Smith</h3><span style="color:#a3c2e0;">Age 9 · 2A</span></div></div><p><i class="fas fa-phone"></i> +216 98 765 432 · parent: Michael</p><p><span class="stat-pill primary">Math 14/20</span> <span class="stat-pill primary">French 16/20</span></p><p><span class="stat-pill success">attendance 88%</span> <span class="stat-pill warning">needs focus</span></p><button class="pro-btn"><i class="fas fa-pen"></i> observation note</button></div>
-                <div class="card-pro"><div style="display:flex; gap:1rem;"><div class="avatar-pro"></div><div><h3>Olivia Brown</h3><span style="color:#a3c2e0;">Age 8 · 2A</span></div></div><p><i class="fas fa-phone"></i> +216 22 334 455 · parent: Sarah</p><p><span class="stat-pill primary">Math 20/20</span> <span class="stat-pill primary">French 20/20</span></p><p><span class="stat-pill success">attendance 100%</span> <span class="stat-pill success">exemplary</span></p><button class="pro-btn"><i class="fas fa-pen"></i> observation note</button></div>
+                <div class="card-pro"><div style="display:flex; gap:1rem; align-items:center;"><div class="avatar-pro"></div><div><h3>Emma Watson</h3><span>Age 8 · 2A</span></div></div><p><i class="fas fa-phone"></i> +216 55 123 456 · parent: Jane</p><p><span class="stat-pill primary">Math 18/20</span> <span class="stat-pill primary">French 19/20</span></p><p><span class="stat-pill success">attendance 95%</span> <span class="stat-pill warning">behavior: engaged</span></p><button class="pro-btn"><i class="fas fa-pen"></i> observation note</button></div>
+                <div class="card-pro"><div style="display:flex; gap:1rem;"><div class="avatar-pro"></div><div><h3>Liam Smith</h3><span>Age 9 · 2A</span></div></div><p><i class="fas fa-phone"></i> +216 98 765 432 · parent: Michael</p><p><span class="stat-pill primary">Math 14/20</span> <span class="stat-pill primary">French 16/20</span></p><p><span class="stat-pill success">attendance 88%</span> <span class="stat-pill warning">needs focus</span></p><button class="pro-btn"><i class="fas fa-pen"></i> observation note</button></div>
+                <div class="card-pro"><div style="display:flex; gap:1rem;"><div class="avatar-pro"></div><div><h3>Olivia Brown</h3><span>Age 8 · 2A</span></div></div><p><i class="fas fa-phone"></i> +216 22 334 455 · parent: Sarah</p><p><span class="stat-pill primary">Math 20/20</span> <span class="stat-pill primary">French 20/20</span></p><p><span class="stat-pill success">attendance 100%</span> <span class="stat-pill success">exemplary</span></p><button class="pro-btn"><i class="fas fa-pen"></i> observation note</button></div>
             </div>
         </section>
 
-        <!-- ✅ Attendance + quick overview (professional) -->
+        <!-- ✅ Attendance -->
         <section class="section-pro" id="attendancePro">
-            <div class="section-title-pro"><i class="fas fa-calendar-check" style="color:#7ca9d9;"></i> ✅ Attendance · 14 March 2026</div>
+            <div class="section-title-pro"><i class="fas fa-calendar-check"></i> ✅ Attendance · 14 March 2026</div>
             <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center;">
                 <span class="stat-pill success" style="padding:0.7rem 2rem;"><i class="fas fa-check-circle"></i> present 22</span>
                 <span class="stat-pill warning" style="padding:0.7rem 2rem;"><i class="fas fa-clock"></i> late 2</span>
@@ -270,9 +502,9 @@
             <p><i class="fas fa-chart-line"></i> weekly average: 94.3% · 2 late this month</p>
         </section>
 
-        <!-- 📝 Grades / evaluation (pro) -->
+        <!-- 📝 Grades -->
         <section class="section-pro" id="gradesPro">
-            <div class="section-title-pro"><i class="fas fa-clipboard-check" style="color:#7ca9d9;"></i> 📝 Recent evaluations</div>
+            <div class="section-title-pro"><i class="fas fa-clipboard-check"></i> 📝 Recent evaluations</div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap:2rem;">
                 <div class="card-pro"><h3>📐 Mathematics</h3> <span class="stat-pill">Emma: 15/20</span> <span class="stat-pill">Liam: 12/20</span> <span class="stat-pill">Olivia: 18/20</span> <p><i class="fas fa-comment"></i>  class avg: 15.2 · good</p><i class="fas fa-upload"></i> upload results</div>
                 <div class="card-pro"><h3>🇫🇷 French</h3> <span class="stat-pill">Emma: 18/20</span> <span class="stat-pill">Liam: 16/20</span> <span class="stat-pill">Olivia: 20/20</span> <p><i class="fas fa-comment"></i>  dictée average 17.4</p><i class="fas fa-upload"></i> upload</div>
@@ -280,155 +512,267 @@
             </div>
         </section>
 
-        <!-- 📅 Homework & Assignments + 📂 Documents (merged pro) -->
+        <!-- 📅 Homework & Documents -->
         <section class="section-pro" id="hwPro">
-            <div class="section-title-pro"><i class="fas fa-folder-open" style="color:#7ca9d9;"></i> 📅 homework & documents</div>
+            <div class="section-title-pro"><i class="fas fa-folder-open"></i> 📅 homework & documents</div>
             <div style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
                 <div class="card-pro" style="flex:1;"><h3>📋 upcoming deadlines</h3><p><i class="fas fa-file-pdf"></i> Math worksheet  (15 Mar)</p><p><i class="fas fa-file-word"></i> French essay (17 Mar)</p><p><i class="fas fa-file-video"></i> Science video (20 Mar)</p></div>
                 <div class="card-pro" style="flex:1;"><h3>📂 lesson resources</h3><p><span class="doc-pro"><i class="fas fa-file-powerpoint"></i> math_plan.pptx</span><span class="doc-pro"><i class="fas fa-dumbbell"></i> geometry_ex.pdf</span><span class="doc-pro"><i class="fas fa-file-alt"></i> exam_mar.docx</span></p></div>
             </div>
         </section>
 
-        <!-- 💬 Messages (parents / director) -->
+        <!-- 💬 Messages -->
         <section class="section-pro" id="msgsPro">
-            <div class="section-title-pro"><i class="fas fa-comment-dots" style="color:#7ca9d9;"></i> 💬 professional messages</div>
+            <div class="section-title-pro"><i class="fas fa-comment-dots"></i> 💬 professional messages</div>
             <div class="message-pro"><i class="fas fa-user-tie"></i> <strong>Director (Maria)</strong> — Please upload final grades by Friday 18th, 5pm.</div>
             <div class="message-pro"><i class="fas fa-user-friends"></i> <strong>Parent: Liam's mom</strong> — Any recommendations for focus? We can schedule a call.</div>
             <div class="message-pro"><i class="fas fa-user-friends"></i> <strong>Parent: Emma's dad</strong> — Thank you for the progress report. </div>
             <button class="pro-btn" style="margin-top:1.5rem;"><i class="fas fa-feather"></i> compose message</button>
         </section>
 
-        <div class="footer-pro"><i class="fas fa-cube"></i> professional suite · Three.js ambient + GSAP scroll</div>
+        <div class="footer-pro"><i class="fas fa-cube"></i> enhanced Three.js · dynamic particles · floating orbs · reactive waves</div>
     </div>
 
     <script>
         (function() {
-            // --- Three.js sophisticated setup (muted tones, refined motion) ---
+            // --- Three.js ENHANCED SETUP (more animations) ---
             const canvas = document.getElementById('three-canvas');
             const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0b121c); // deep navy
+            scene.background = new THREE.Color(0x0b121c); // dark default
 
-            const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 1.5, 14);
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 2, 16);
             camera.lookAt(0, 0, 0);
 
             const renderer = new THREE.WebGLRenderer({ canvas, alpha: false, antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = false; // performance
 
-            // subtle lights
-            const ambient = new THREE.AmbientLight(0x2f5170);
+            // --- LIGHTS (enhanced) ---
+            const ambient = new THREE.AmbientLight(0x404060);
             scene.add(ambient);
-            const dirLight = new THREE.DirectionalLight(0x7ca9d9, 0.8);
-            dirLight.position.set(3, 4, 5);
+            
+            const dirLight = new THREE.DirectionalLight(0x7ca9d9, 1.2);
+            dirLight.position.set(2, 5, 5);
             scene.add(dirLight);
-            const backLight = new THREE.PointLight(0x2f5170, 0.5);
-            backLight.position.set(-3, 1, -2);
-            scene.add(backLight);
+            
+            const pointLight1 = new THREE.PointLight(0x3b82f6, 1.5, 20);
+            pointLight1.position.set(3, 2, 4);
+            scene.add(pointLight1);
+            
+            const pointLight2 = new THREE.PointLight(0xf59e0b, 0.8, 20);
+            pointLight2.position.set(-3, -1, 5);
+            scene.add(pointLight2);
 
-            // elegant floating geometry (professional, not childish)
-            const group = new THREE.Group();
+            // --- MAIN GROUP FOR FLOATING OBJECTS ---
+            const mainGroup = new THREE.Group();
 
-            // transparent rings
-            const ringMat = new THREE.MeshStandardMaterial({ color: 0x3b82f6, emissive: 0x0b1a2a, transparent: true, opacity: 0.15, wireframe: true });
-            const ring1 = new THREE.Mesh(new THREE.TorusGeometry(1.8, 0.05, 32, 200), ringMat);
-            ring1.rotation.x = Math.PI / 3;
-            ring1.rotation.z = 0.4;
-            group.add(ring1);
+            // 1. Central dynamic ring (rotating)
+            const ringGeo = new THREE.TorusGeometry(2.0, 0.06, 32, 200);
+            const ringMat = new THREE.MeshStandardMaterial({ 
+                color: 0x3b82f6, 
+                emissive: 0x1a3a5a,
+                transparent: true, 
+                opacity: 0.25,
+                wireframe: true 
+            });
+            const centerRing = new THREE.Mesh(ringGeo, ringMat);
+            centerRing.rotation.x = Math.PI / 2;
+            centerRing.rotation.z = 0.3;
+            mainGroup.add(centerRing);
 
-            const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.4, 0.03, 24, 200), ringMat);
-            ring2.rotation.x = Math.PI / 2.5;
-            ring2.rotation.y = 0.8;
-            group.add(ring2);
+            // 2. Secondary ring (counter-rotating)
+            const ring2Geo = new THREE.TorusGeometry(2.8, 0.04, 24, 200);
+            const ring2Mat = new THREE.MeshStandardMaterial({ 
+                color: 0x7ca9d9, 
+                emissive: 0x1f3f5a,
+                transparent: true, 
+                opacity: 0.2,
+                wireframe: true 
+            });
+            const outerRing = new THREE.Mesh(ring2Geo, ring2Mat);
+            outerRing.rotation.x = Math.PI / 3;
+            outerRing.rotation.y = 0.5;
+            mainGroup.add(outerRing);
 
-            // floating orbs (barely visible)
-            const sphereMat = new THREE.MeshStandardMaterial({ color: 0x4b7aa1, emissive: 0x143750, transparent: true, opacity: 0.2 });
-            for (let i = 0; i < 10; i++) {
-                const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.15 + i*0.01, 12), sphereMat);
-                const angle = (i / 10) * Math.PI * 2;
-                sphere.position.set(Math.cos(angle)*2.5, Math.sin(angle*2)*1.2, Math.sin(angle)*2 - 1);
-                group.add(sphere);
+            // 3. Floating orbs (pulsing)
+            const orbMat = new THREE.MeshStandardMaterial({ color: 0x4b7aa1, emissive: 0x1a3a5a, transparent: true, opacity: 0.4 });
+            const orbs = [];
+            for (let i = 0; i < 16; i++) {
+                const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.2 + i*0.01, 16), orbMat);
+                const angle = (i / 16) * Math.PI * 2;
+                const radius = 3.2 + Math.sin(i)*0.5;
+                sphere.position.set(
+                    Math.cos(angle) * radius,
+                    Math.sin(angle * 3) * 1.5,
+                    Math.sin(angle) * radius - 1
+                );
+                mainGroup.add(sphere);
+                orbs.push(sphere);
             }
 
-            // sparse small cubes (very low opacity)
-            const cubeMat = new THREE.MeshStandardMaterial({ color: 0x9ab9d4, emissive: 0x1f3f5a, transparent: true, opacity: 0.1 });
-            for (let j = 0; j < 6; j++) {
-                const cube = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 0.2), cubeMat);
-                cube.position.set(Math.sin(j)*3, Math.cos(j*1.5)*2, j*1.5 - 3);
-                group.add(cube);
+            // 4. Small cubes floating (data points)
+            const cubeMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, emissive: 0x5f3a1a, transparent: true, opacity: 0.25 });
+            for (let j = 0; j < 12; j++) {
+                const cube = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.15, 0.15), cubeMat);
+                const angle = (j / 12) * Math.PI * 2;
+                cube.position.set(
+                    Math.sin(angle) * 3.5,
+                    Math.cos(angle * 2) * 2,
+                    Math.cos(angle) * 3
+                );
+                mainGroup.add(cube);
             }
 
-            scene.add(group);
+            scene.add(mainGroup);
 
-            // tiny stars (particles) - neutral
+            // --- ENHANCED PARTICLE SYSTEM (twinkling) ---
+            const particleCount = 800;
             const particleGeo = new THREE.BufferGeometry();
-            const particleCount = 400;
             const posArray = new Float32Array(particleCount * 3);
-            for (let i = 0; i < particleCount*3; i+=3) {
-                posArray[i] = (Math.random() - 0.5) * 24;
-                posArray[i+1] = (Math.random() - 0.5) * 20;
-                posArray[i+2] = (Math.random() - 5) * 5;
+            const colorArray = new Float32Array(particleCount * 3);
+            
+            for (let i = 0; i < particleCount; i++) {
+                // positions in a sphere
+                const r = 5 + Math.random() * 8;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                
+                posArray[i*3] = Math.sin(phi) * Math.cos(theta) * r;
+                posArray[i*3+1] = Math.sin(phi) * Math.sin(theta) * r * 0.5; // flatten vertically
+                posArray[i*3+2] = Math.cos(phi) * r;
+                
+                // colors: blueish / goldish
+                const color = new THREE.Color().setHSL(0.6 + Math.random()*0.2, 0.8, 0.5);
+                colorArray[i*3] = color.r;
+                colorArray[i*3+1] = color.g;
+                colorArray[i*3+2] = color.b;
             }
+            
             particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-            const particleMat = new THREE.PointsMaterial({ color: 0x3b82f6, size: 0.04, transparent: true });
+            particleGeo.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+            
+            const particleMat = new THREE.PointsMaterial({ 
+                size: 0.08, 
+                vertexColors: true,
+                transparent: true,
+                blending: THREE.AdditiveBlending
+            });
             const particles = new THREE.Points(particleGeo, particleMat);
             scene.add(particles);
 
+            // --- FLOATING WAVES (extra) ---
+            const waveGroup = new THREE.Group();
+            const waveMat = new THREE.MeshStandardMaterial({ color: 0x3b82f6, emissive: 0x0b1a2a, transparent: true, opacity: 0.1, wireframe: true });
+            for (let k = 0; k < 3; k++) {
+                const radius = 3.0 + k * 1.2;
+                const waveRing = new THREE.Mesh(new THREE.TorusGeometry(radius, 0.03, 16, 100), waveMat);
+                waveRing.rotation.x = Math.PI / 2;
+                waveRing.rotation.z = k * 0.5;
+                waveGroup.add(waveRing);
+            }
+            scene.add(waveGroup);
+
+            // --- ANIMATION LOOP (enhanced) ---
+            let clock = new THREE.Clock();
+            
             function animate() {
                 requestAnimationFrame(animate);
-                group.rotation.y += 0.0004;
-                group.rotation.x += 0.0002;
+                
+                const delta = clock.getDelta();
+                const elapsedTime = performance.now() * 0.001; // seconds
+
+                // Rotate main group
+                mainGroup.rotation.y += 0.0006;
+                mainGroup.rotation.x += 0.0002;
+                
+                // Rotate outer ring opposite direction
+                outerRing.rotation.y += 0.0008;
+                outerRing.rotation.x += 0.0003;
+                
+                // Pulse orbs
+                orbs.forEach((orb, index) => {
+                    const scale = 1 + Math.sin(elapsedTime * 2 + index) * 0.1;
+                    orb.scale.set(scale, scale, scale);
+                });
+                
+                // Rotate wave group
+                waveGroup.rotation.y += 0.0003;
+                waveGroup.rotation.x += 0.0001;
+                
+                // Rotate particles
                 particles.rotation.y += 0.0001;
+                particles.rotation.x += 0.00005;
+                
+                // Camera slight movement (subtle parallax)
+                camera.position.x = Math.sin(elapsedTime * 0.1) * 1;
+                camera.position.y = 2 + Math.sin(elapsedTime * 0.2) * 0.3;
+                camera.lookAt(0, 0, 0);
+                
                 renderer.render(scene, camera);
             }
             animate();
 
+            // resize handler
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
             });
 
-            // --- GSAP ScrollTrigger pro animations (subtle, professional) ---
+            // --- GSAP ScrollTrigger (existing) ---
             gsap.registerPlugin(ScrollTrigger);
-
-            // header slight float
             gsap.to('#headerPro', {
                 scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 2 },
-                y: 15,
-                rotationX: 0.5,
-                ease: 'power1.inOut'
+                y: 15, rotationX: 0.5, ease: 'power1.inOut'
             });
-
-            // widgets stagger
             gsap.utils.toArray('.widget-pro').forEach((w, i) => {
                 gsap.to(w, {
                     scrollTrigger: { trigger: w, start: 'top 85%', end: 'bottom 25%', scrub: 1 },
-                    y: 20 - i*3,
-                    rotationX: 0.8,
-                    scale: 0.99,
-                    ease: 'sine.inOut'
+                    y: 20 - i*3, rotationX: 0.8, scale: 0.99, ease: 'sine.inOut'
                 });
             });
-
-            // sections fade & subtle translate
             gsap.utils.toArray('.section-pro').forEach(sec => {
-                gsap.fromTo(sec, 
-                    { opacity: 0.9, y: 20 },
-                    { opacity: 1, y: 0, duration: 1.2, scrollTrigger: { trigger: sec, start: 'top 85%', end: 'bottom 25%', scrub: 0.8 } }
-                );
+                gsap.fromTo(sec, { opacity: 0.9, y: 20 }, { 
+                    opacity: 1, y: 0, duration: 1.2, 
+                    scrollTrigger: { trigger: sec, start: 'top 85%', end: 'bottom 25%', scrub: 0.8 } 
+                });
             });
-
-            // cards micro movement
             gsap.utils.toArray('.card-pro').forEach(card => {
                 gsap.to(card, {
                     scrollTrigger: { trigger: card, start: 'top 95%', end: 'bottom 20%', scrub: 0.6 },
-                    y: 8,
-                    rotationX: 0.3,
-                    ease: 'power2.inOut'
+                    y: 8, rotationX: 0.3, ease: 'power2.inOut'
                 });
             });
 
+            // --- MOOD TOGGLE (with scene background update) ---
+            const body = document.body;
+            const toggleBtn = document.getElementById('moodToggle');
+            const sunIcon = document.getElementById('sunIcon');
+            const moonIcon = document.getElementById('moonIcon');
+
+            function setMood(isLight) {
+                if (isLight) {
+                    body.classList.add('light-mode');
+                    scene.background.set(0xf0f5fa); // light sky
+                    sunIcon.style.opacity = '1';
+                    moonIcon.style.opacity = '0.5';
+                } else {
+                    body.classList.remove('light-mode');
+                    scene.background.set(0x0b121c); // dark navy
+                    sunIcon.style.opacity = '0.5';
+                    moonIcon.style.opacity = '1';
+                }
+            }
+
+            toggleBtn.addEventListener('click', () => {
+                const isLight = body.classList.contains('light-mode');
+                setMood(!isLight);
+            });
+
+            // start dark
+            setMood(false);
         })();
     </script>
 </body>

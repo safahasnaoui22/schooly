@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2️⃣ Parent Dashboard · 3D Pen Cursor</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            cursor: none !important; /* Force hide default cursor */
+        }
+
+        body {
+            background: #f4f9ff;
+            overflow-x: hidden;
+        }
+
+        body.dark-mode {
+            background: #0f1a26;
+        }
+
+        /* ----- CUSTOM 3D PEN Cursor (VERY VISIBLE) ----- */
+        #pen-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 99999; /* Max z-index */
+            pointer-events: none;
+            display: block !important;
+            background: transparent;
+        }
+
+        /* ----- Three.js background canvas ----- */
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ----- LEFT NAVBAR ----- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(59, 130, 246, 0.3);
+            z-index: 20;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 25px rgba(0,0,0,0.1);
+        }
+
+        body.dark-mode .navbar {
+            background: rgba(18, 28, 40, 0.95);
+            border-right: 1px solid rgba(76, 130, 200, 0.3);
+        }
+
+        .nav-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .nav-header i {
+            font-size: 2rem;
+            color: #3b82f6;
+        }
+
+        .nav-header h2 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            color: #1e3b5c;
+        }
+
+        body.dark-mode .nav-header h2 {
+            color: #c7e0ff;
+        }
+
+        .nav-items {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 1rem 1.2rem;
+            border-radius: 16px;
+            color: #1e3b5c;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        body.dark-mode .nav-item {
+            color: #c7e0ff;
+        }
+
+        .nav-item i {
+            width: 24px;
+            font-size: 1.3rem;
+            color: #3b82f6;
+        }
+
+        .nav-item:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: #3b82f6;
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+        }
+
+        .mood-toggle {
+            margin-top: auto;
+            padding: 1.5rem 0 1rem;
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toggle-btn {
+            background: white;
+            border: 1px solid #3b82f6;
+            border-radius: 40px;
+            padding: 0.5rem 1rem;
+            display: flex;
+            gap: 12px;
+            cursor: none;
+            color: #1e3b5c;
+        }
+
+        body.dark-mode .toggle-btn {
+            background: #1f3a5a;
+            color: #c7e0ff;
+        }
+
+        /* ----- MAIN DASHBOARD ----- */
+        .dashboard {
+            position: relative;
+            z-index: 10;
+            max-width: 1300px;
+            margin: 0 0 0 260px;
+            padding: 2rem 2.5rem 4rem;
+            color: #1e2f3e;
+            pointer-events: auto;
+        }
+
+        body.dark-mode .dashboard {
+            color: #eef4ff;
+        }
+
+        .header-simple {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 2.2rem;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.9);
+        }
+
+        body.dark-mode .header-simple {
+            background: rgba(18, 28, 40, 0.9);
+        }
+
+        .header-simple h1 {
+            font-weight: 600;
+            font-size: 2rem;
+            color: #1e3b5c;
+        }
+        body.dark-mode .header-simple h1 {
+            color: #e1efff;
+        }
+
+        .badge-light {
+            background: white;
+            padding: 0.5rem 1.8rem;
+            border-radius: 40px;
+            color: #1e3b5c;
+            border: 1px solid #d0e2f2;
+        }
+        body.dark-mode .badge-light {
+            background: #1f3a5a;
+            color: #c7e0ff;
+        }
+
+        .widget-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0 3rem;
+        }
+
+        .widget-simple {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 1.5rem 1.2rem;
+            border: 1px solid rgba(255,255,255,0.9);
+            box-shadow: 0 8px 18px -12px #2b4b6e;
+        }
+        body.dark-mode .widget-simple {
+            background: rgba(18, 28, 40, 0.9);
+        }
+        .widget-simple i { font-size: 2rem; color: #3498db; margin-bottom: 0.5rem; }
+        .widget-simple h3 { font-size: 1.4rem; color: #1e3b5c; }
+        body.dark-mode .widget-simple h3 { color: #e1efff; }
+
+        .section-simple {
+            margin: 3rem 0;
+            padding: 2rem 2rem;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(6px);
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        body.dark-mode .section-simple {
+            background: rgba(18, 28, 40, 0.8);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            border-left: 8px solid #3498db;
+            padding-left: 1.5rem;
+            color: #1a3349;
+        }
+
+        .profile-card {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            background: rgba(255,255,255,0.9);
+            border-radius: 40px;
+            padding: 1.8rem 2.2rem;
+        }
+
+        .avatar-large {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #3498db, #9b59b6);
+            border: 4px solid white;
+        }
+
+        .grade-mini {
+            background: white;
+            border-radius: 20px;
+            padding: 1rem 1.5rem;
+            display: inline-block;
+            margin: 0.5rem;
+        }
+
+        .att-day {
+            display: inline-block;
+            background: white;
+            border-radius: 60px;
+            padding: 0.7rem 2rem;
+            margin: 0.5rem;
+            border: 1px solid #e2eef9;
+        }
+        .att-day.present { background: #e3f7e3; color: #1f7a1f; }
+        .att-day.absent { background: #ffe3e3; color: #b33; }
+
+        .homework-item {
+            background: white;
+            border-radius: 24px;
+            padding: 1rem 1.8rem;
+            margin: 1rem 0;
+        }
+
+        .announcement {
+            background: white;
+            border-radius: 20px;
+            padding: 1.2rem 1.8rem;
+            margin: 1rem 0;
+            border-left: 8px solid #f39c12;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+        }
+        .gallery-item {
+            background: white;
+            border-radius: 28px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .message-bubble {
+            background: white;
+            border-radius: 24px 24px 24px 8px;
+            padding: 1.2rem 1.8rem;
+            margin: 1rem 0;
+            border-left: 6px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas for 3D pen cursor (MUST be on top) -->
+    <canvas id="pen-canvas"></canvas>
+    <!-- Background Three.js canvas -->
+    <canvas id="three-canvas"></canvas>
+
+    <!-- LEFT NAVBAR -->
+    <div class="navbar">
+        <div class="nav-header">
+            <i class="fas fa-child"></i>
+            <h2>ParentSpace</h2>
+        </div>
+        <div class="nav-items">
+            <div class="nav-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</div>
+            <div class="nav-item"><i class="fas fa-child"></i> My Child</div>
+            <div class="nav-item"><i class="fas fa-star"></i> Grades</div>
+            <div class="nav-item"><i class="fas fa-calendar-check"></i> Attendance</div>
+            <div class="nav-item"><i class="fas fa-pencil-alt"></i> Homework</div>
+            <div class="nav-item"><i class="fas fa-bullhorn"></i> Announcements</div>
+            <div class="nav-item"><i class="fas fa-comments"></i> Messages</div>
+            <div class="nav-item"><i class="fas fa-camera"></i> Gallery</div>
+        </div>
+        <div class="mood-toggle">
+            <span><i class="fas fa-adjust"></i> Mood</span>
+            <div class="toggle-btn" id="moodToggle">
+                <i class="fas fa-sun" id="sunIcon" style="opacity:0.5;"></i>
+                <i class="fas fa-moon" id="moonIcon" style="opacity:1;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div class="dashboard">
+        <div class="header-simple">
+            <div>
+                <h1><i class="fas fa-child"></i> 2️⃣ Parent Dashboard</h1>
+                <p>Welcome back, David's parents</p>
+            </div>
+            <div class="badge-light"><i class="fas fa-bell"></i> 2 updates</div>
+        </div>
+
+        <div class="widget-grid">
+            <div class="widget-simple"><i class="fas fa-calendar-check"></i><h3>Attendance</h3><p>This week: 90%</p></div>
+            <div class="widget-simple"><i class="fas fa-star"></i><h3>Latest grades</h3><p>Math: 18/20</p></div>
+            <div class="widget-simple"><i class="fas fa-envelope"></i><h3>Messages</h3><p>1 new message</p></div>
+            <div class="widget-simple"><i class="fas fa-calendar-alt"></i><h3>Upcoming</h3><p>Parent conf. 25 Mar</p></div>
+        </div>
+
+        <section class="section-simple">
+            <div class="section-title">👦 My Child</div>
+            <div class="profile-card">
+                <div class="avatar-large"></div>
+                <div>
+                    <p><strong>David Miller</strong> · Age 9</p>
+                    <p>Grade 2A · Ms. Johnson</p>
+                    <p>Contact: david.mom@email.com</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-simple">
+            <div class="section-title">📊 Grades</div>
+            <span class="grade-mini"><strong>Math</strong> 18/20</span>
+            <span class="grade-mini"><strong>French</strong> 16/20</span>
+            <span class="grade-mini"><strong>Science</strong> 14/20</span>
+        </section>
+
+        <section class="section-simple">
+            <div class="section-title">📅 Attendance</div>
+            <span class="att-day present">March 12 - Present</span>
+            <span class="att-day absent">March 13 - Absent</span>
+            <span class="att-day present">March 14 - Present</span>
+        </section>
+
+        <section class="section-simple">
+            <div class="section-title">📝 Homework</div>
+            <div class="homework-item">📄 Math worksheet - Due 17 Mar</div>
+            <div class="homework-item">📝 French essay - Due 19 Mar</div>
+        </section>
+
+        <section class="section-simple">
+            <div class="section-title">📢 Announcements</div>
+            <div class="announcement">🌴 Spring break: 20-28 March</div>
+            <div class="announcement">🔬 Science fair: 2 April</div>
+        </section>
+
+        <section class="section-simple">
+            <div class="section-title">💬 Messages</div>
+            <div class="message-bubble">Ms. Johnson: Great job in math quiz!</div>
+            <div class="message-bubble">Admin: Permission slip due Friday</div>
+        </section>
+
+        <section class="section-simple">
+            <div class="section-title">📷 Gallery</div>
+            <div class="gallery-grid">
+                <div class="gallery-item"><i class="fas fa-tree"></i> Forest trip</div>
+                <div class="gallery-item"><i class="fas fa-flask"></i> Science lab</div>
+                <div class="gallery-item"><i class="fas fa-paint-brush"></i> Art class</div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        (function() {
+            // --- SIMPLE BACKGROUND (just to have something) ---
+            const bgCanvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf4f9ff);
+
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 1, 16);
+            
+            const renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Add some simple floating spheres
+            const geometry = new THREE.SphereGeometry(0.5, 16);
+            const material = new THREE.MeshStandardMaterial({ color: 0x3498db, emissive: 0x113355, transparent: true, opacity: 0.2 });
+            const sphere = new THREE.Mesh(geometry, material);
+            sphere.position.set(2, 1, -2);
+            scene.add(sphere);
+            
+            const sphere2 = new THREE.Mesh(geometry, material);
+            sphere2.position.set(-2, -1, -2);
+            scene.add(sphere2);
+            
+            const light = new THREE.AmbientLight(0x404080);
+            scene.add(light);
+            
+            function animateBG() {
+                requestAnimationFrame(animateBG);
+                sphere.rotation.x += 0.01;
+                sphere.rotation.y += 0.01;
+                sphere2.rotation.x -= 0.01;
+                sphere2.rotation.y -= 0.01;
+                renderer.render(scene, camera);
+            }
+            animateBG();
+
+            // --- 3D PEN CURSOR (GUARANTEED TO SHOW) ---
+            const penCanvas = document.getElementById('pen-canvas');
+            const penRenderer = new THREE.WebGLRenderer({ 
+                canvas: penCanvas, 
+                alpha: true, 
+                antialias: true,
+                preserveDrawingBuffer: true 
+            });
+            penRenderer.setSize(window.innerWidth, window.innerHeight);
+            penRenderer.setClearColor(0x000000, 0); // Completely transparent
+
+            const penScene = new THREE.Scene();
+            
+            // Use perspective camera for better 3D effect
+            const penCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            penCamera.position.set(0, 0, 15);
+            penCamera.lookAt(0, 0, 0);
+
+            // Bright lights to make pen visible
+            const penLight1 = new THREE.PointLight(0xffaa88, 2);
+            penLight1.position.set(5, 5, 10);
+            penScene.add(penLight1);
+            
+            const penLight2 = new THREE.PointLight(0x88aaff, 2);
+            penLight2.position.set(-5, -5, 10);
+            penScene.add(penLight2);
+            
+            const penLight3 = new THREE.AmbientLight(0xffffff, 0.5);
+            penScene.add(penLight3);
+
+            // Create a LARGE, COLORFUL pen
+            const penGroup = new THREE.Group();
+
+            // Pen body - bright red (very visible)
+            const bodyGeo = new THREE.CylinderGeometry(0.8, 0.8, 4, 32);
+            const bodyMat = new THREE.MeshStandardMaterial({ 
+                color: 0xff3333, 
+                emissive: 0x440000,
+                shininess: 60,
+                transparent: false
+            });
+            const body = new THREE.Mesh(bodyGeo, bodyMat);
+            body.rotation.x = Math.PI / 2;
+            body.position.set(0, 0, 0);
+            penGroup.add(body);
+
+            // Pen tip - bright yellow
+            const tipGeo = new THREE.ConeGeometry(0.7, 1.5, 32);
+            const tipMat = new THREE.MeshStandardMaterial({ color: 0xffdd44, emissive: 0x442200 });
+            const tip = new THREE.Mesh(tipGeo, tipMat);
+            tip.position.set(2.5, 0, 0);
+            tip.rotation.z = -Math.PI / 2;
+            penGroup.add(tip);
+
+            // Pen back - blue
+            const backGeo = new THREE.SphereGeometry(0.9, 32);
+            const backMat = new THREE.MeshStandardMaterial({ color: 0x4444ff, emissive: 0x112244 });
+            const back = new THREE.Mesh(backGeo, backMat);
+            back.position.set(-2.2, 0, 0);
+            penGroup.add(back);
+
+            // Pen clip - green
+            const clipGeo = new THREE.BoxGeometry(0.5, 1.2, 0.8);
+            const clipMat = new THREE.MeshStandardMaterial({ color: 0x44ff44 });
+            const clip = new THREE.Mesh(clipGeo, clipMat);
+            clip.position.set(-1, 0.8, 0.6);
+            penGroup.add(clip);
+
+            // Add a glow ring
+            const ringGeo = new THREE.TorusGeometry(1.2, 0.1, 16, 64);
+            const ringMat = new THREE.MeshStandardMaterial({ color: 0xffaa00, emissive: 0x442200 });
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            ring.rotation.x = Math.PI / 2;
+            ring.rotation.z = 0.5;
+            ring.position.set(0, 0, 0);
+            penGroup.add(ring);
+
+            penScene.add(penGroup);
+
+            // Mouse tracking
+            const mouse = new THREE.Vector2(0, 0);
+            
+            document.addEventListener('mousemove', (event) => {
+                // Convert to 3D space
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+
+            // Animation
+            function animatePen() {
+                requestAnimationFrame(animatePen);
+
+                // Move pen with mouse (in 3D space)
+                penGroup.position.x = mouse.x * 8;
+                penGroup.position.y = mouse.y * 5;
+                
+                // Add rotation based on mouse movement
+                penGroup.rotation.y = mouse.x * 0.5;
+                penGroup.rotation.x = mouse.y * 0.3;
+                
+                // Constant subtle animation
+                penGroup.rotation.z += 0.01;
+                
+                // Scale pulse
+                const scale = 1 + Math.sin(Date.now() * 0.01) * 0.1;
+                penGroup.scale.set(scale, scale, scale);
+
+                penRenderer.render(penScene, penCamera);
+            }
+            animatePen();
+
+            // Resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                
+                penCamera.aspect = window.innerWidth / window.innerHeight;
+                penCamera.updateProjectionMatrix();
+                penRenderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // Mood toggle
+            const body = document.body;
+            const toggleBtn = document.getElementById('moodToggle');
+            const sunIcon = document.getElementById('sunIcon');
+            const moonIcon = document.getElementById('moonIcon');
+
+            toggleBtn.addEventListener('click', () => {
+                if (body.classList.contains('dark-mode')) {
+                    body.classList.remove('dark-mode');
+                    scene.background.set(0xf4f9ff);
+                    sunIcon.style.opacity = '1';
+                    moonIcon.style.opacity = '0.5';
+                } else {
+                    body.classList.add('dark-mode');
+                    scene.background.set(0x0f1a26);
+                    sunIcon.style.opacity = '0.5';
+                    moonIcon.style.opacity = '1';
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
