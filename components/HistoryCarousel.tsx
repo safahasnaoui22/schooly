@@ -82,7 +82,7 @@ const HistoryCarousel = () => {
         slidesPerView: "auto",
         spaceBetween: 0,
         loop: true,
-        loopedSlides: 7,
+        loopAdditionalSlides: 7,
         simulateTouch: true,
         grabCursor: true,
         touchRatio: 1,
