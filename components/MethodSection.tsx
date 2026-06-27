@@ -14,14 +14,10 @@ export default function MethodSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Initialize Lenis smooth scroll
+    // Initialize Lenis smooth scroll — minimal options for compatibility
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smooth: true,
-      gestureDirection: "vertical",
-      smoothTouch: true,
-      touchMultiplier: 2,
     });
 
     function raf(time: number) {
@@ -178,46 +174,62 @@ export default function MethodSection() {
       title: "Apprentissage Ludique",
       description:
         "Nous croyons que chaque enfant apprend mieux lorsqu'il se sent motivé, valorisé et impliqué. Notre approche pédagogique repose sur un apprentissage ludique et interactif combinant jeux éducatifs, ateliers créatifs, travaux de groupe et outils numériques adaptés à l'âge des élèves. Cette méthode stimule la curiosité naturelle des enfants, développe leur esprit critique et renforce leur autonomie tout en rendant l'école agréable et motivante.",
-      image: "https://i.pinimg.com/1200x/af/ab/5b/afab5ba8d0099e903260235d13cfbbba.jpg",
+      image:
+        "https://i.pinimg.com/1200x/af/ab/5b/afab5ba8d0099e903260235d13cfbbba.jpg",
     },
     {
       id: "blue",
       title: "Excellence Académique",
       description:
         "Nous suivons rigoureusement le programme officiel tunisien tout en l'enrichissant par des méthodes pédagogiques modernes et innovantes. Nos enseignants qualifiés accompagnent chaque élève afin de consolider les bases fondamentales en arabe, français, mathématiques et sciences. Un suivi régulier, des évaluations constructives et un encadrement personnalisé permettent d'assurer la réussite scolaire et la progression continue de chaque enfant.",
-      image: "https://i.pinimg.com/1200x/08/46/9d/08469d77ca5bd335a9e5b5ebe6741961.jpg",
+      image:
+        "https://i.pinimg.com/1200x/08/46/9d/08469d77ca5bd335a9e5b5ebe6741961.jpg",
     },
     {
       id: "pink",
       title: "Développement Personnel",
       description:
         "Au-delà des apprentissages académiques, nous accordons une grande importance au développement personnel et social de nos élèves. À travers des activités sportives, artistiques et culturelles, nous cultivons la confiance en soi, le respect des autres, l'esprit d'équipe et le sens des responsabilités. Notre objectif est de former des enfants épanouis, équilibrés et prêts à relever les défis de demain.",
-      image: "https://i.pinimg.com/736x/90/63/86/9063869ee7d203627958bcccbf004a5c.jpg",
+      image:
+        "https://i.pinimg.com/736x/90/63/86/9063869ee7d203627958bcccbf004a5c.jpg",
     },
     {
       id: "orange",
       title: "Environnement Sécurisé",
       description:
         "La sécurité, le bien-être et l'épanouissement des enfants sont au cœur de nos priorités. Notre établissement offre un environnement propre, organisé et entièrement sécurisé, avec une surveillance constante et une équipe pédagogique attentive. Nous favorisons un climat de confiance entre l'école, les élèves et les parents afin de garantir un cadre rassurant et propice à l'apprentissage.",
-      image: "https://i.pinimg.com/736x/6e/f1/55/6ef155e25a6a517d8c89a46ebba37d71.jpg",
+      image:
+        "https://i.pinimg.com/736x/6e/f1/55/6ef155e25a6a517d8c89a46ebba37d71.jpg",
     },
   ];
 
   return (
     <div className={styles.container} ref={sectionRef}>
       <div style={{ textAlign: "center", marginBottom: "80px" }}>
-        <h1 className={styles.h1methode} style={{ fontSize: "48px", fontWeight: 800, marginBottom: "10px" }}>
+        <h1
+          className={styles.h1methode}
+          style={{
+            fontSize: "48px",
+            fontWeight: 800,
+            marginBottom: "10px",
+          }}
+        >
           Notre Méthode Pédagogique
         </h1>
         <p style={{ fontSize: "18px", opacity: 0.8 }}>
-          Une approche moderne et bienveillante adaptée aux enfants du primaire en Tunisie
+          Une approche moderne et bienveillante adaptée aux enfants du primaire
+          en Tunisie
         </p>
       </div>
 
       <div className={styles.arch}>
         <div className={styles.arch__left}>
           {methods.map((method, index) => (
-            <div key={index} className={styles.arch__info} id={`${method.id}-arch`}>
+            <div
+              key={index}
+              className={styles.arch__info}
+              id={`${method.id}-arch`}
+            >
               <div className={styles.content}>
                 <h2 className={styles.header}>{method.title}</h2>
                 <p className={styles.desc}>{method.description}</p>
