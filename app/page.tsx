@@ -21,11 +21,9 @@ import SchoolStats from "../components/SchoolStats";
 import Footer from "@/components/Footer";
 import Video from "@/components/Video";
 
-
-
 export default function Home() {
   return (
-       <main className="relative min-h-screen ">
+    <main className="relative min-h-screen ">
       {/* Background decorative elements */}
       <div className="gradient-bg"></div>
       <div className="particles-container" id="particles"></div>
@@ -49,33 +47,24 @@ export default function Home() {
       </div>
     
       <HeroSection />
-      <br>
-      </br>
-      <br>
-      </br>
-      <br>
-      </br>
+      <br />
+      <br />
+      <br />
+
+      <ClassesSection />
       
-
-   <ClassesSection />
+      <MethodSection />
       
-   <MethodSection />
-   <Video/>
-<Activities/>
+      {/* ✅ Add Steps here */}
+      <Steps />
 
+      <Video />
+      <Activities />
 
-  <Avis />
-
-<Partenaire/>
-
-
-
-
-
-<Footer/>
-
-       <Particles/>
-     
+      <Avis />
+      <Partenaire />
+      <Footer />
+      <Particles />
     </main>
   );
 }
