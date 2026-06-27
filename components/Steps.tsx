@@ -7,15 +7,24 @@ const Steps: React.FC = () => {
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
+    let animatedCount = 0;
+    const totalCards = cardsRef.current.length;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add(styles.animateIn);
+            animatedCount++;
           }
         });
+
+        // Disconnect after all cards have been animated
+        if (animatedCount >= totalCards) {
+          observer.disconnect();
+        }
       },
-      { threshold: 0.2, triggerOnce: true }
+      { threshold: 0.2 } // triggerOnce removed – handled manually
     );
 
     cardsRef.current.forEach((card) => {
