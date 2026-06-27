@@ -22,13 +22,7 @@ import Footer from "@/components/Footer";
 import Video from "@/components/Video";
 
 
-const HistoryCarousel = dynamic(
-  () => import('@/components/HistoryCarousel'),
-  { 
-    ssr: false, // Prevents SSR issues with browser-specific code
-    loading: () => <div style={{ height: '100vh', opacity: 0 }} /> // Invisible placeholder
-  }
-);
+
 export default function Home() {
   return (
        <main className="relative min-h-screen ">
